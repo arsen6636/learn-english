@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>A Speech on Polite Communication</title>
+    <style>
+        /* ===== 全局重置 & 基础 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f9f5;
+            color: #2c3e2f;
+            padding: 20px 16px 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(60, 100, 70, 0.10);
+            padding: 28px 22px 36px;
+            transition: all 0.2s;
+        }
+
+        /* ===== 标题区 ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 2px dashed #d4e8d4;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #2a5e3a;
+            background: linear-gradient(145deg, #2a5e3a, #3d7a4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .sub {
+            font-size: 14px;
+            color: #6b8f72;
+            margin-top: 6px;
+            letter-spacing: 2px;
+        }
+
+        /* ===== 句子卡片 ===== */
+        .sentence {
+            background: #fafffa;
+            border-radius: 20px;
+            padding: 18px 18px 14px;
+            margin-bottom: 18px;
+            border: 1px solid #e4f0e4;
+            transition: background 0.25s, border-color 0.25s, box-shadow 0.3s;
+            box-shadow: 0 2px 6px rgba(60, 100, 70, 0.04);
+        }
+
+        /* 高亮当前朗读句 */
+        .sentence.active {
+            background: #edf7ed;
+            border-color: #7bb57b;
+            box-shadow: 0 4px 16px rgba(70, 140, 80, 0.15);
+        }
+
+        /* 英文原文 */
+        .en {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #1d3a22;
+            font-weight: 450;
+            word-break: break-word;
+        }
+
+        /* 课标单词：加粗 + 红色音标释义 */
+        .word {
+            font-weight: 700;
+            color: #b4433c;
+        }
+
+        .note {
+            font-weight: 400;
+            color: #b4433c;
+            font-size: 0.85em;
+            background: #fef0ee;
+            padding: 0 4px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        /* 中文翻译（逐句） */
+        .zh {
+            font-size: 15px;
+            color: #4e6e54;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dotted #dce8dc;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== 播放控制按钮（每句） ===== */
+        .sentence-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .sentence-controls button {
+            background: #eaf3ea;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2a5e3a;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .sentence-controls button:active {
+            transform: scale(0.94);
+        }
+
+        .sentence-controls .play-btn {
+            background: #cbe3cb;
+            color: #1d4a2a;
+        }
+
+        .sentence-controls .play-btn:active {
+            background: #b3d4b3;
+        }
+
+        .sentence-controls .pause-btn {
+            background: #f0e8d8;
+            color: #7a6a4a;
+        }
+
+        .sentence-controls .pause-btn:active {
+            background: #e6dcca;
+        }
+
+        .sentence-controls .status-badge {
+            font-size: 13px;
+            color: #6f8f72;
+            margin-left: 4px;
+            font-weight: 400;
+        }
+
+        /* ===== 全局控制栏 ===== */
+        .global-controls {
+            margin-top: 28px;
+            padding: 18px 16px 16px;
+            background: #eef6ee;
+            border-radius: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 14px 20px;
+            border: 1px solid #d4e8d4;
+        }
+
+        .global-controls .ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .global-controls button {
+            background: #ffffff;
+            border: 1px solid #bdd6bd;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2a5e3a;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            touch-action: manipulation;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .global-controls button:active {
+            transform: scale(0.94);
+        }
+
+        .global-controls .btn-loop {
+            background: #d4e8d4;
+            border-color: #8bb88b;
+        }
+
+        .global-controls .btn-loop.active-loop {
+            background: #7bb57b;
+            color: #fff;
+            border-color: #5a9a5a;
+        }
+
+        .global-controls .btn-stop {
+            background: #f5e8e8;
+            border-color: #dbb8b8;
+            color: #8a4a4a;
+        }
+
+        .global-controls .loop-info {
+            font-size: 14px;
+            color: #3d6b44;
+            background: #ffffffcc;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-weight: 500;
+            border: 1px solid #d4e8d4;
+        }
+
+        /* ===== 底部完整中文翻译 ===== */
+        .full-translation {
+            margin-top: 32px;
+            padding: 22px 20px 18px;
+            background: #f7fbf7;
+            border-radius: 24px;
+            border: 1px solid #dfecdf;
+        }
+
+        .full-translation .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a7a52;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .full-translation .label::before {
+            content: '📖';
+            font-size: 18px;
+        }
+
+        .full-translation .zh-full {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #2a4a30;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 朗读状态指示 ===== */
+        .speaking-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #8bb88b;
+            margin-left: 6px;
+            transition: background 0.2s;
+        }
+
+        .speaking-indicator.active {
+            background: #4caf50;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        /* ===== 响应式适配 ===== */
+        @media (max-width: 480px) {
+            .app {
+                padding: 16px 12px 24px;
+                border-radius: 24px;
+            }
+            .header h1 {
+                font-size: 21px;
+            }
+            .en {
+                font-size: 15.5px;
+                line-height: 1.65;
+            }
+            .note {
+                font-size: 0.8em;
+                white-space: normal;
+            }
+            .zh {
+                font-size: 14px;
+            }
+            .sentence {
+                padding: 14px 14px 12px;
+            }
+            .sentence-controls button {
+                padding: 7px 14px;
+                font-size: 13px;
+            }
+            .global-controls {
+                padding: 14px 12px;
+                gap: 10px;
+            }
+            .global-controls button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            .full-translation {
+                padding: 16px 14px;
+            }
+            .full-translation .zh-full {
+                font-size: 14.5px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .en {
+                font-size: 19px;
+            }
+            .sentence {
+                padding: 22px 26px 16px;
+            }
+        }
+
+        /* 触摸优化 */
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 滚动条美观 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e8f0e8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0cbb0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app" id="app">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🌱 A Speech on Polite Communication</h1>
+            <div class="sub">✦ 礼貌沟通 · 九年级英语 Unit 3 ✦</div>
+        </div>
+
+        <!-- 句子容器 -->
+        <div id="sentenceContainer"></div>
+
+        <!-- 全局控制 -->
+        <div class="global-controls" id="globalControls">
+            <div class="ctrl-group">
+                <button class="btn-loop" id="btnLoop">🔁 循环播放</button>
+                <span class="loop-info" id="loopInfo">0 / 10</span>
+                <button class="btn-stop" id="btnStop">⏹ 停止全部</button>
+            </div>
+            <div class="ctrl-group" style="font-size:14px;color:#4e6e54;">
+                <span id="globalStatus">● 就绪</span>
+            </div>
+        </div>
+
+        <!-- 底部完整中文翻译 -->
+        <div class="full-translation">
+            <div class="label">完整中文翻译</div>
+            <div class="zh-full" id="fullTranslation">
+                老师们、同学们，早上好！今天，我想和大家分享一些关于如何在日常交流中保持礼貌的小建议。
+                当我们在外面时，我们可能需要找一个洗手间、厕所或浴室。这些公共场所通常位于干净的街道旁边。
+                我们也可以在书店里放松，或者在一个大型商场里购物，它位于街道拐角处，面向东方。附近有一个邮局，那里的职员很友好。
+                如果我们想和远方的朋友保持联系，我们可以买一张邮票和一张明信片，然后把它们寄出去。位于中心区域的购物中心真的很迷人，商品不贵，环境不拥挤，非常便利。
+                我们甚至可以在那里买到新鲜的葡萄。当寻求帮助时，我们不应仓促行事，而应该礼貌地说话。如果我们听不清楚，可以说“请再说一遍？”
+                职员会亲切地为我们建议合适的路线。我们必须避免不礼貌。一个自信的发言者总是使用正确的方向并提出清晰的请求。职员可以给我们指路，我们可能会在路上经过一个邮局。
+                例如，当我们询问地铁时，我们应该礼貌地称呼他人。我们可以问：“打扰一下，您能告诉我去最近的车站怎么走吗？”并且别忘了对我们寻求帮助的人说“谢谢”。
+                这是我们行为的基本准则。简而言之，礼貌的话语和行为帮助我们成为更好的人。让我们每天都尽力做到有礼貌！感谢大家的倾听。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  1. 数据：24 个句子，每个包含 enHTML / enText / zh
+        //     enHTML 中已用 <span class="word"> 和 <span class="note"> 标记课标单词
+        // ============================================================
+        const sentencesData = [{
+            enHTML: `Good morning, dear teachers and fellow <span class="word">students</span><span class="note"> ( /ˈstjuːdnts/ n. 学生们 )</span>!`,
+            enText: 'Good morning, dear teachers and fellow students!',
+            zh: '老师们、同学们，早上好！'
+        }, {
+            enHTML: `Today, I'd like to share some <span class="word">useful</span><span class="note"> ( /ˈjuːsfl/ adj. 有用的 )</span> tips on how to be <span class="word">polite</span><span class="note"> ( /pəˈlaɪt/ adj. 有礼貌的 )</span> in <span class="word">daily</span><span class="note"> ( /ˈdeɪli/ adj. 日常的 )</span> <span class="word">communication</span><span class="note"> ( /kəˌmjuːnɪˈkeɪʃn/ n. 交流 )</span>.`,
+            enText: "Today, I'd like to share some useful tips on how to be polite in daily communication.",
+            zh: '今天，我想和大家分享一些关于如何在日常交流中保持礼貌的小建议。'
+        }, {
+            enHTML: `When we are <span class="word">outside</span><span class="note"> ( /ˌaʊtˈsaɪd/ adv. 在外面 )</span>, we may need to find a <span class="word">restroom</span><span class="note"> ( /ˈrestruːm/ n. 洗手间 )</span>, a <span class="word">washroom</span><span class="note"> ( /ˈwɒʃruːm/ n. 洗手间 )</span>, or a <span class="word">bathroom</span><span class="note"> ( /ˈbɑːθruːm/ n. 浴室 )</span>.`,
+            enText: 'When we are outside, we may need to find a restroom, a washroom, or a bathroom.',
+            zh: '当我们在外面时，我们可能需要找一个洗手间、厕所或浴室。'
+        }, {
+            enHTML: `These <span class="word">public</span><span class="note"> ( /ˈpʌblɪk/ adj. 公共的 )</span> places are <span class="word">normally</span><span class="note"> ( /ˈnɔːməli/ adv. 通常 )</span> <span class="word">located</span><span class="note"> ( /ləʊˈkeɪtɪd/ adj. 位于 )</span> <span class="word">beside</span><span class="note"> ( /bɪˈsaɪd/ prep. 在……旁边 )</span> clean streets.`,
+            enText: 'These public places are normally located beside clean streets.',
+            zh: '这些公共场所通常位于干净的街道旁边。'
+        }, {
+            enHTML: `We can also relax in a <span class="word">bookstore</span><span class="note"> ( /ˈbʊkstɔːr/ n. 书店 )</span> or shop in a large <span class="word">mall</span><span class="note"> ( /mɔːl/ n. 商场 )</span>, which stands at a street <span class="word">corner</span><span class="note"> ( /ˈkɔːnər/ n. 拐角 )</span> facing the <span class="word">east</span><span class="note"> ( /iːst/ n. 东方 )</span>.`,
+            enText: 'We can also relax in a bookstore or shop in a large mall, which stands at a street corner facing the east.',
+            zh: '我们也可以在书店里放松，或者在一个大型商场里购物，它位于街道拐角处，面向东方。'
+        }, {
+            enHTML: `There is a <span class="word">nearby</span><span class="note"> ( /ˌnɪrˈbaɪ/ adj. & adv. 附近的 )</span> post office, and the <span class="word">clerk</span><span class="note"> ( /klɜːrk/ n. 职员 )</span> is friendly.`,
+            enText: 'There is a nearby post office, and the clerk is friendly.',
+            zh: '附近有一个邮局，那里的职员很友好。'
+        }, {
+            enHTML: `If we want to keep in touch with <span class="word">distant</span><span class="note"> ( /ˈdɪstənt/ adj. 遥远的 )</span> friends, we can buy a <span class="word">stamp</span><span class="note"> ( /stæmp/ n. 邮票 )</span> and a <span class="word">postcard</span><span class="note"> ( /ˈpəʊstkɑːrd/ n. 明信片 )</span>, and then <span class="word">mail</span><span class="note"> ( /meɪl/ v. 邮寄 )</span> them.`,
+            enText: 'If we want to keep in touch with distant friends, we can buy a stamp and a postcard, and then mail them.',
+            zh: '如果我们想和远方的朋友保持联系，我们可以买一张邮票和一张明信片，然后把它们寄出去。'
+        }, {
+            enHTML: `The shopping center in the <span class="word">central</span><span class="note"> ( /ˈsentrəl/ adj. 中心的 )</span> area is truly <span class="word">fascinating</span><span class="note"> ( /ˈfæsɪneɪtɪŋ/ adj. 迷人的 )</span> with <span class="word">inexpensive</span><span class="note"> ( /ˌɪnɪkˈspensɪv/ adj. 不昂贵的 )</span> goods and an <span class="word">uncrowded</span><span class="note"> ( /ʌnˈkraʊdɪd/ adj. 不拥挤的 )</span> environment.`,
+            enText: 'The shopping center in the central area is truly fascinating with inexpensive goods and an uncrowded environment.',
+            zh: '位于中心区域的购物中心真的很迷人，商品不贵，环境不拥挤。'
+        }, {
+            enHTML: `It is very <span class="word">convenient</span><span class="note"> ( /kənˈviːniənt/ adj. 便利的 )</span>.`,
+            enText: 'It is very convenient.',
+            zh: '它非常便利。'
+        }, {
+            enHTML: `We can even buy fresh <span class="word">grape</span><span class="note"> ( /ɡreɪp/ n. 葡萄 )</span> there.`,
+            enText: 'We can even buy fresh grape there.',
+            zh: '我们甚至可以在那里买到新鲜的葡萄。'
+        }, {
+            enHTML: `When asking for help, we shouldn't <span class="word">rush</span><span class="note"> ( /rʌʃ/ v. 仓促 )</span>.`,
+            enText: "When asking for help, we shouldn't rush.",
+            zh: '当寻求帮助时，我们不应仓促行事。'
+        }, {
+            enHTML: `Instead, we should speak <span class="word">politely</span><span class="note"> ( /pəˈlaɪtli/ adv. 礼貌地 )</span>.`,
+            enText: 'Instead, we should speak politely.',
+            zh: '相反，我们应该礼貌地说话。'
+        }, {
+            enHTML: `If we don't hear clearly, we can say "<span class="word">Pardon</span><span class="note"> ( /ˈpɑːdn/ v. 请再说一遍 )</span>?"`,
+            enText: 'If we don\'t hear clearly, we can say "Pardon?"',
+            zh: '如果我们听不清楚，我们可以说“请再说一遍？”'
+        }, {
+            enHTML: `The <span class="word">staff</span><span class="note"> ( /stɑːf/ n. 职员 )</span> will kindly <span class="word">suggest</span><span class="note"> ( /səˈdʒest/ v. 建议 )</span> <span class="word">suitable</span><span class="note"> ( /ˈsuːtəbl/ adj. 合适的 )</span> <span class="word">routes</span><span class="note"> ( /ruːts/ n. 路线 )</span>.`,
+            enText: 'The staff will kindly suggest suitable routes.',
+            zh: '职员会亲切地为我们建议合适的路线。'
+        }, {
+            enHTML: `We must avoid being <span class="word">impolite</span><span class="note"> ( /ˌɪmpəˈlaɪt/ adj. 不礼貌的 )</span>.`,
+            enText: 'We must avoid being impolite.',
+            zh: '我们必须避免不礼貌。'
+        }, {
+            enHTML: `A <span class="word">confident</span><span class="note"> ( /ˈkɒnfɪdənt/ adj. 自信的 )</span> <span class="word">speaker</span><span class="note"> ( /ˈspiːkər/ n. 发言者 )</span> always uses the <span class="word">correct</span><span class="note"> ( /kəˈrekt/ adj. 正确的 )</span> <span class="word">direction</span><span class="note"> ( /dəˈrekʃn/ n. 方向 )</span> and makes a clear <span class="word">request</span><span class="note"> ( /rɪˈkwest/ n. 请求 )</span>.`,
+            enText: 'A confident speaker always uses the correct direction and makes a clear request.',
+            zh: '一个自信的发言者总是使用正确的方向并提出清晰的请求。'
+        }, {
+            enHTML: `The staff can <span class="word">direct</span><span class="note"> ( /dəˈrekt/ v. 指导 )</span> us, and we may <span class="word">pass by</span><span class="note"> ( /pɑːs baɪ/ 短语：路过 )</span> a post office on the way.`,
+            enText: 'The staff can direct us, and we may pass by a post office on the way.',
+            zh: '职员可以给我们指路，我们可能会在路上经过一个邮局。'
+        }, {
+            enHTML: `For example, when we ask about the <span class="word">underground</span><span class="note"> ( /ˈʌndəɡraʊnd/ n. 地铁 )</span>, we should <span class="word">address</span><span class="note"> ( /əˈdres/ v. 称呼 )</span> others politely.`,
+            enText: 'For example, when we ask about the underground, we should address others politely.',
+            zh: '例如，当我们询问地铁时，我们应该礼貌地称呼他人。'
+        }, {
+            enHTML: `We can ask, "Excuse me, could you please tell me how to get to the nearest station?" And don't forget to say "thank you" to <span class="word">whom</span><span class="note"> ( /huːm/ pron. 谁 )</span> we ask for help.`,
+            enText: 'We can ask, "Excuse me, could you please tell me how to get to the nearest station?" And don\'t forget to say "thank you" to whom we ask for help.',
+            zh: '我们可以问：“打扰一下，您能告诉我去最近的车站怎么走吗？”并且别忘了对我们寻求帮助的人说“谢谢”。'
+        }, {
+            enHTML: `This is a basic <span class="word">course</span><span class="note"> ( /kɔːs/ n. 课程 )</span> of action for us.`,
+            enText: 'This is a basic course of action for us.',
+            zh: '这是我们行为的基本准则。'
+        }, {
+            enHTML: `In short, <span class="word">polite</span><span class="note"> ( /pəˈlaɪt/ adj. 礼貌的 )</span> words and actions help us become better people.`,
+            enText: 'In short, polite words and actions help us become better people.',
+            zh: '简而言之，礼貌的话语和行为帮助我们成为更好的人。'
+        }, {
+            enHTML: `Let's try our best to be <span class="word">polite</span><span class="note"> ( /pəˈlaɪt/ adj. 有礼貌的 )</span> every day!`,
+            enText: "Let's try our best to be polite every day!",
+            zh: '让我们每天都尽力做到有礼貌！'
+        }, {
+            enHTML: `Thank you for your listening!`,
+            enText: 'Thank you for your listening!',
+            zh: '感谢大家的倾听！'
+        }];
+
+        // ============================================================
+        //  2. 状态管理
+        // ============================================================
+        const state = {
+            // 每个句子的朗读状态
+            utterances: [], // 存储每个句子的 SpeechSynthesisUtterance
+            isPlaying: [], // boolean 数组
+            isPaused: [], // boolean 数组
+            currentIndex: -1, // 当前正在朗读的句子索引
+
+            // 全局循环
+            loopCount: 0,
+            maxLoop: 10,
+            isLooping: false,
+            loopTimer: null,
+            isGlobalPlaying: false,
+
+            // 语音
+            voice: null,
+        };
+
+        // DOM 引用
+        const container = document.getElementById('sentenceContainer');
+        const btnLoop = document.getElementById('btnLoop');
+        const btnStop = document.getElementById('btnStop');
+        const loopInfo = document.getElementById('loopInfo');
+        const globalStatus = document.getElementById('globalStatus');
+
+        // ============================================================
+        //  3. 渲染句子
+        // ============================================================
+        function renderSentences() {
+            let html = '';
+            sentencesData.forEach((item, idx) => {
+                html += `
+                    <div class="sentence" data-index="${idx}" id="sentence-${idx}">
+                        <div class="en">${item.enHTML}</div>
+                        <div class="zh">${item.zh}</div>
+                        <div class="sentence-controls">
+                            <button class="play-btn" data-index="${idx}">▶ 播放</button>
+                            <button class="pause-btn" data-index="${idx}">⏸ 暂停</button>
+                            <span class="status-badge" id="status-${idx}">● 待播</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            // 初始化状态数组
+            state.isPlaying = new Array(sentencesData.length).fill(false);
+            state.isPaused = new Array(sentencesData.length).fill(false);
+            state.utterances = new Array(sentencesData.length).fill(null);
+
+            // 绑定事件
+            document.querySelectorAll('.play-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.index, 10);
+                    playSentence(idx);
+                });
+            });
+
+            document.querySelectorAll('.pause-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.dataset.index, 10);
+                    pauseSentence(idx);
+                });
+            });
+        }
+
+        // ============================================================
+        //  4. 语音合成核心
+        // ============================================================
+        function getVoice() {
+            return new Promise((resolve) => {
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    // 优先选择美式女声
+                    let selected = voices.find(v =>
+                        v.lang.startsWith('en-US') &&
+                        (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha'))
+                    );
+                    if (!selected) {
+                        selected = voices.find(v => v.lang.startsWith('en-US'));
+                    }
+                    if (!selected) {
+                        selected = voices.find(v => v.lang.startsWith('en'));
+                    }
+                    resolve(selected || voices[0] || null);
+                } else {
+                    // 等待语音加载
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        const vs = window.speechSynthesis.getVoices();
+                        let selected = vs.find(v =>
+                            v.lang.startsWith('en-US') &&
+                            (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha'))
+                        );
+                        if (!selected) {
+                            selected = vs.find(v => v.lang.startsWith('en-US'));
+                        }
+                        if (!selected) {
+                            selected = vs.find(v => v.lang.startsWith('en'));
+                        }
+                        resolve(selected || vs[0] || null);
+                    };
+                    // 超时兜底
+                    setTimeout(() => {
+                        const vs = window.speechSynthesis.getVoices();
+                        resolve(vs[0] || null);
+                    }, 1000);
+                }
+            });
+        }
+
+        // 预加载语音
+        let voiceReady = false;
+        getVoice().then(v => {
+            state.voice = v;
+            voiceReady = true;
+            updateGlobalStatus('就绪');
+        });
+
+        function speakText(text, onEnd, onError) {
+            return new Promise((resolve, reject) => {
+                if (!window.speechSynthesis) {
+                    reject(new Error('浏览器不支持语音合成'));
+                    return;
+                }
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.92;
+                utterance.pitch = 1.05;
+                utterance.volume = 1;
+
+                if (state.voice) {
+                    utterance.voice = state.voice;
+                } else {
+                    // 尝试再次获取
+                    const vs = window.speechSynthesis.getVoices();
+                    const v = vs.find(v => v.lang.startsWith('en-US'));
+                    if (v) utterance.voice = v;
+                }
+
+                utterance.onend = () => {
+                    resolve();
+                    if (onEnd) onEnd();
+                };
+                utterance.onerror = (e) => {
+                    reject(e);
+                    if (onError) onError(e);
+                };
+
+                window.speechSynthesis.speak(utterance);
+                // 保存引用以便暂停/停止
+                return utterance;
+            });
+        }
+
+        // ============================================================
+        //  5. 播放 / 暂停 单句
+        // ============================================================
+        let currentUtterance = null;
+        let currentIdx = -1;
+
+        function playSentence(idx) {
+            if (idx < 0 || idx >= sentencesData.length) return;
+
+            // 如果当前有正在播放的句子，先停止
+            if (currentUtterance && state.isPlaying[currentIdx]) {
+                window.speechSynthesis.cancel();
+                state.isPlaying[currentIdx] = false;
+                state.isPaused[currentIdx] = false;
+                updateSentenceStatus(currentIdx);
+                clearHighlight(currentIdx);
+            }
+
+            const text = sentencesData[idx].enText;
+            const el = document.getElementById(`sentence-${idx}`);
+
+            // 高亮
+            clearHighlightAll();
+            el.classList.add('active');
+            state.currentIndex = idx;
+
+            // 更新状态
+            state.isPlaying[idx] = true;
+            state.isPaused[idx] = false;
+            updateSentenceStatus(idx);
+            updateGlobalStatus(`朗读中 #${idx+1}`);
+
+            // 开始朗读
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.92;
+            utterance.pitch = 1.05;
+            utterance.volume = 1;
+
+            if (state.voice) {
+                utterance.voice = state.voice;
+            } else {
+                const vs = window.speechSynthesis.getVoices();
+                const v = vs.find(v => v.lang.startsWith('en-US'));
+                if (v) utterance.voice = v;
+            }
+
+            currentUtterance = utterance;
+            currentIdx = idx;
+
+            utterance.onend = () => {
+                state.isPlaying[idx] = false;
+                state.isPaused[idx] = false;
+                updateSentenceStatus(idx);
+                clearHighlight(idx);
+                if (state.currentIndex === idx) {
+                    state.currentIndex = -1;
+                }
+                currentUtterance = null;
+                currentIdx = -1;
+                updateGlobalStatus('就绪');
+
+                // 如果处于循环模式，自动播下一句
+                if (state.isLooping) {
+                    const nextIdx = idx + 1;
+                    if (nextIdx < sentencesData.length) {
+                        // 延迟一点再播下一句
+                        setTimeout(() => playSentence(nextIdx), 400);
+                    } else {
+                        // 一轮结束
+                        state.loopCount++;
+                        updateLoopInfo();
+                        if (state.loopCount < state.maxLoop) {
+                            // 开始新一轮
+                            setTimeout(() => playSentence(0), 600);
+                        } else {
+                            // 达到最大次数
+                            stopAll();
+                            updateGlobalStatus(`✅ 已完成 ${state.maxLoop} 次循环`);
+                            state.isLooping = false;
+                            btnLoop.classList.remove('active-loop');
+                            btnLoop.textContent = '🔁 循环播放';
+                        }
+                    }
+                }
+            };
+
+            utterance.onerror = (e) => {
+                console.warn('语音错误:', e);
+                state.isPlaying[idx] = false;
+                state.isPaused[idx] = false;
+                updateSentenceStatus(idx);
+                clearHighlight(idx);
+                currentUtterance = null;
+                currentIdx = -1;
+                updateGlobalStatus('⚠️ 语音错误');
+                if (state.isLooping) {
+                    state.isLooping = false;
+                    btnLoop.classList.remove('active-loop');
+                    btnLoop.textContent = '🔁 循环播放';
+                }
+            };
+
+            window.speechSynthesis.speak(utterance);
+            state.utterances[idx] = utterance;
+        }
+
+        function pauseSentence(idx) {
+            if (idx < 0 || idx >= sentencesData.length) return;
+
+            if (state.isPlaying[idx]) {
+                // 暂停当前朗读
+                if (currentUtterance && currentIdx === idx) {
+                    window.speechSynthesis.cancel();
+                    state.isPlaying[idx] = false;
+                    state.isPaused[idx] = true;
+                    updateSentenceStatus(idx);
+                    updateGlobalStatus(`已暂停 #${idx+1}`);
+                    clearHighlight(idx);
+                    currentUtterance = null;
+                    currentIdx = -1;
+                }
+            } else if (state.isPaused[idx]) {
+                // 如果已暂停，则恢复播放
+                // 但我们用resume逻辑：直接重新播放
+                state.isPaused[idx] = false;
+                playSentence(idx);
+            } else {
+                // 没有播放，点击暂停无效果
+                updateSentenceStatus(idx);
+            }
+        }
+
+        // ============================================================
+        //  6. 全局控制
+        // ============================================================
+        function stopAll() {
+            window.speechSynthesis.cancel();
+
+            // 重置所有状态
+            for (let i = 0; i < sentencesData.length; i++) {
+                state.isPlaying[i] = false;
+                state.isPaused[i] = false;
+                updateSentenceStatus(i);
+                clearHighlight(i);
+            }
+            state.currentIndex = -1;
+            currentUtterance = null;
+            currentIdx = -1;
+
+            // 停止循环
+            state.isLooping = false;
+            state.loopCount = 0;
+            btnLoop.classList.remove('active-loop');
+            btnLoop.textContent = '🔁 循环播放';
+            updateLoopInfo();
+            updateGlobalStatus('已停止');
+        }
+
+        function toggleLoop() {
+            if (state.isLooping) {
+                // 关闭循环
+                state.isLooping = false;
+                btnLoop.classList.remove('active-loop');
+                btnLoop.textContent = '🔁 循环播放';
+                updateGlobalStatus('已取消循环');
+                // 不停止当前朗读
+            } else {
+                // 开启循环
+                state.isLooping = true;
+                state.loopCount = 0;
+                btnLoop.classList.add('active-loop');
+                btnLoop.textContent = '🔁 循环中';
+                updateLoopInfo();
+                updateGlobalStatus('🔄 循环模式开启');
+
+                // 如果当前没有播放，从第一句开始
+                const anyPlaying = state.isPlaying.some(v => v === true);
+                if (!anyPlaying) {
+                    // 停止所有，从头开始
+                    window.speechSynthesis.cancel();
+                    for (let i = 0; i < sentencesData.length; i++) {
+                        state.isPlaying[i] = false;
+                        state.isPaused[i] = false;
+                        updateSentenceStatus(i);
+                        clearHighlight(i);
+                    }
+                    state.currentIndex = -1;
+                    currentUtterance = null;
+                    currentIdx = -1;
+                    // 开始播放第一句
+                    setTimeout(() => playSentence(0), 300);
+                } else {
+                    // 如果已经在播放，让当前播放结束后自动继续
+                    // 不需要额外操作，在 onend 中会处理
+                }
+            }
+        }
+
+        // ============================================================
+        //  7. UI 更新辅助
+        // ============================================================
+        function updateSentenceStatus(idx) {
+            const el = document.getElementById(`status-${idx}`);
+            if (!el) return;
+            if (state.isPlaying[idx]) {
+                el.textContent = '🔊 朗读中';
+                el.style.color = '#2a7a3a';
+            } else if (state.isPaused[idx]) {
+                el.textContent = '⏸ 已暂停';
+                el.style.color = '#b88a3a';
+            } else {
+                el.textContent = '● 待播';
+                el.style.color = '#6f8f72';
+            }
+        }
+
+        function clearHighlight(idx) {
+            const el = document.getElementById(`sentence-${idx}`);
+            if (el) el.classList.remove('active');
+        }
+
+        function clearHighlightAll() {
+            document.querySelectorAll('.sentence.active').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function updateLoopInfo() {
+            loopInfo.textContent = `${state.loopCount} / ${state.maxLoop}`;
+        }
+
+        function updateGlobalStatus(msg) {
+            globalStatus.textContent = `● ${msg}`;
+        }
+
+        // ============================================================
+        //  8. 初始化
+        // ============================================================
+        function init() {
+            renderSentences();
+
+            // 绑定全局按钮
+            btnLoop.addEventListener('click', toggleLoop);
+            btnStop.addEventListener('click', stopAll);
+
+            // 预加载语音
+            getVoice().then(v => {
+                state.voice = v;
+                voiceReady = true;
+                updateGlobalStatus('就绪');
+            });
+
+            // 初始化循环信息
+            updateLoopInfo();
+            updateGlobalStatus('就绪');
+
+            // 恢复暂停状态（点击暂停后，再点暂停恢复）
+            // 已在 pauseSentence 中处理
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+
+        // 当页面可见时重新获取语音（解决某些浏览器问题）
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                getVoice().then(v => {
+                    if (v) state.voice = v;
+                });
+            }
+        });
+
+        // 如果语音列表还没加载，尝试获取
+        if (window.speechSynthesis) {
+            window.speechSynthesis.getVoices();
+        }
+
+        console.log('✅ 演讲稿 H5 已加载 | 课标单词全覆盖 | 美式女声朗读');
+    </script>
+
+</body>
+</html>
