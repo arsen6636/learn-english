@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九全Unit2 美式跟读短文｜Lovely Traditional Festivals</title>
+    <style>
+        body {
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 25px;
+            font-family: "Microsoft Yahei", Arial, sans-serif;
+        }
+        h2 {
+            color: #111;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sentence-wrap {
+            margin: 14px 0;
+            padding-bottom: 8px;
+        }
+        button {
+            padding: 5px 14px;
+            margin: 0 8px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #3377dd;
+            color: #fff;
+            font-size: 15px;
+        }
+        button.stop {
+            background: #e54343;
+        }
+        .word-bold {
+            font-weight: 700;
+            font-size: 19px;
+        }
+        .phonetic {
+            color: red;
+        }
+        .trans-title {
+            margin-top: 50px;
+            font-size: 21px;
+            font-weight: bold;
+        }
+        .global-control {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Lovely Traditional Festivals</h2>
+
+    <div class="sentence-wrap" data-sentence="I love the old tradition of enjoying the moon with my relative on Mid-Autumn night.">
+        I love the old <span class="word-bold">tradition</span> <span class="phonetic">(/trəˈdɪʃn/ n. 传统；习俗)</span> of enjoying the moon with my <span class="word-bold">relative</span> <span class="phonetic">(/ˈrelətɪv/ n. 亲属；亲戚)</span> on Mid-Autumn night.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="sentence-wrap" data-sentence="I really admire the ancient story of Chang’e.">
+        I really <span class="word-bold">admire</span> <span class="phonetic">(/ədˈmaɪər/ v. 欣赏；仰慕)</span> the ancient <span class="word-bold">story</span> <span class="phonetic">(/ˈstɔːri/ n. 故事；传说)</span> of Chang’e.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="sentence-wrap" data-sentence="Bad men wanted to steal Hou Yi’s magic medicine, so Chang’e drank it and flew to the moon alone.">
+        Bad men wanted to <span class="word-bold">steal</span> <span class="phonetic">(/stiːl/ v. 偷；窃取)</span> Hou Yi’s magic medicine, so Chang’e drank it and flew to the moon alone.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="sentence-wrap" data-sentence="People lay mooncakes and fruit in yards to miss her.">
+        People <span class="word-bold">lay</span> <span class="phonetic">(/leɪ/ v. 放置；安放)</span> mooncakes and fruit in yards to miss her.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="sentence-wrap" data-sentence="The Water Festival is a time for Thai people to celebrate their new year.">
+        The Water Festival is a time for Thai people to <span class="word-bold">celebrate</span> <span class="phonetic">(/ˈselɪbreɪt/ v. 庆祝；庆贺)</span> their new year.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="sentence-wrap" data-sentence="Christmas has no scary ghost, but some kids like to trick their parents.">
+        Christmas has no scary <span class="word-bold">ghost</span> <span class="phonetic">(/ɡoʊst/ n. 鬼魂；幽灵)</span>, but some kids like to <span class="word-bold">trick</span> <span class="phonetic">(/trɪk/ v. 捉弄；欺骗)</span> their parents.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="sentence-wrap" data-sentence="These festivals bring us much warmth and remind us to value family love.">
+        These festivals bring us much <span class="word-bold">warmth</span> <span class="phonetic">(/wɔːrmθ/ n. 温暖；暖和)</span> and remind us to value family love.
+        <button class="play-sent">播放单句</button>
+        <button class="stop-sent stop">暂停单句</button>
+    </div>
+
+    <div class="trans-title">全文中文翻译</div>
+    <p>美好的传统节日</p>
+    <p>我喜爱中秋夜晚和亲人一同赏月的古老习俗。我十分欣赏嫦娥的古老传说。坏人想要偷走后羿的仙药，于是嫦娥喝下仙药，独自飞向了月宫。</p>
+    <p>人们会在院子里摆放月饼和水果来思念她。泼水节是泰国人民庆祝新年的日子。圣诞节并没有可怕的鬼魂，但有些孩子喜欢捉弄他们的父母。</p>
+    <p>这些节日带给我们许多温暖，提醒我们珍惜亲情。</p>
+
+    <!-- 全局整篇播放控制按钮 -->
+    <div class="global-control">
+        <button id="playAll">整篇循环播放</button>
+        <button id="stopAll" class="stop">全部暂停</button>
+    </div>
+
+    <script>
+        // 全局语音变量
+        let utterance = null;
+        let singleLoopTimer = null;
+        let allTextList = [];
+        let allPlayIndex = 0;
+        let allPlayTimeout = null;
+
+        // 优先匹配美式新闻主持人音色
+        function getAmericanNewsVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            let targetVoice = voices.find(v =>
+                v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
+            );
+            if (!targetVoice) {
+                targetVoice = voices.find(v => v.lang === "en-US");
+            }
+            return targetVoice || voices[0];
+        }
+
+        // 单句循环朗读
+        function readSingleSentence(text) {
+            stopAllAudio();
+            const voice = getAmericanNewsVoice();
+            function speakOnce() {
+                utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = voice;
+                utterance.rate = 0.85;
+                utterance.pitch = 1.02;
+                window.speechSynthesis.speak(utterance);
+            }
+            speakOnce();
+            singleLoopTimer = setInterval(speakOnce, text.length * 230);
+        }
+
+        // 停止单句朗读
+        function stopSingleSentence() {
+            window.speechSynthesis.cancel();
+            clearInterval(singleLoopTimer);
+        }
+
+        // 整篇顺序循环朗读
+        function playAllArticle() {
+            stopAllAudio();
+            allTextList = [];
+            document.querySelectorAll(".sentence-wrap").forEach(item => {
+                allTextList.push(item.dataset.sentence);
+            });
+            allPlayIndex = 0;
+            playNextAll();
+        }
+
+        function playNextAll() {
+            if (allPlayIndex >= allTextList.length) allPlayIndex = 0;
+            const txt = allTextList[allPlayIndex];
+            const voice = getAmericanNewsVoice();
+            utterance = new SpeechSynthesisUtterance(txt);
+            utterance.voice = voice;
+            utterance.rate = 0.85;
+            utterance.pitch = 1.02;
+            utterance.onend = () => {
+                allPlayIndex++;
+                allPlayTimeout = setTimeout(playNextAll, 700);
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // 停止所有语音
+        function stopAllAudio() {
+            window.speechSynthesis.cancel();
+            clearInterval(singleLoopTimer);
+            clearTimeout(allPlayTimeout);
+            allPlayIndex = 9999;
+        }
+
+        // 绑定页面按钮事件
+        window.speechSynthesis.onvoiceschanged = () => {};
+        document.querySelectorAll(".play-sent").forEach(btn => {
+            btn.onclick = function () {
+                const wrap = this.closest(".sentence-wrap");
+                readSingleSentence(wrap.dataset.sentence);
+            }
+        });
+        document.querySelectorAll(".stop-sent").forEach(btn => {
+            btn.onclick = stopSingleSentence;
+        });
+        document.getElementById("playAll").onclick = playAllArticle;
+        document.getElementById("stopAll").onclick = stopAllAudio;
+    </script>
+</body>
+</html>
