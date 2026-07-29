@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>九全Unit2 美式跟读短文｜Lovely Traditional Festivals</title>
     <style>
         body {
@@ -23,14 +23,17 @@
             padding-bottom: 8px;
         }
         button {
-            padding: 5px 14px;
-            margin: 0 8px;
+            padding: 8px 14px;
+            margin: 6px 8px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
             background: #3377dd;
             color: #fff;
-            font-size: 15px;
+            font-size: 16px;
+            /* 适配手机触控 */
+            min-height: 44px;
+            min-width: 90px;
         }
         button.stop {
             background: #e54343;
@@ -53,9 +56,15 @@
             border-top: 2px solid #999;
             text-align: center;
         }
+        .tip {
+            color: #f00;
+            text-align: center;
+            margin:10px 0;
+        }
     </style>
 </head>
 <body>
+    <div class="tip">手机端请点击按钮解锁音频，刷新页面后重新点播放</div>
     <h2>Lovely Traditional Festivals</h2>
 
     <div class="sentence-wrap" data-sentence="I love the old tradition of enjoying the moon with my relative on Mid-Autumn night.">
@@ -119,28 +128,58 @@
         let allTextList = [];
         let allPlayIndex = 0;
         let allPlayTimeout = null;
+        let voiceCache = null;
+        // 标记是否已解锁音频（手机必须用户点击后才能播放）
+        let audioUnlocked = false;
 
-        // 优先匹配美式新闻主持人音色
-        function getAmericanNewsVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            let targetVoice = voices.find(v =>
-                v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
-            );
-            if (!targetVoice) {
-                targetVoice = voices.find(v => v.lang === "en-US");
-            }
-            return targetVoice || voices[0];
+        // 预加载并缓存美式新闻音色
+        function loadVoice() {
+            return new Promise((resolve) => {
+                const getVoices = () => {
+                    const voices = window.speechSynthesis.getVoices();
+                    if(voices.length === 0) {
+                        setTimeout(getVoices,100);
+                        return;
+                    }
+                    let targetVoice = voices.find(v =>
+                        v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
+                    );
+                    if (!targetVoice) targetVoice = voices.find(v => v.lang === "en-US");
+                    voiceCache = targetVoice || voices[0];
+                    resolve(voiceCache);
+                };
+                getVoices();
+            })
+        }
+
+        // 统一停止所有音频、定时器
+        function stopAllAudio() {
+            window.speechSynthesis.cancel();
+            clearInterval(singleLoopTimer);
+            clearTimeout(allPlayTimeout);
+            singleLoopTimer = null;
+            allPlayTimeout = null;
+            allPlayIndex = 9999;
         }
 
         // 单句循环朗读
-        function readSingleSentence(text) {
+        async function readSingleSentence(text) {
             stopAllAudio();
-            const voice = getAmericanNewsVoice();
+            // 手机端首次点击解锁音频权限
+            if(!audioUnlocked){
+                const temp = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(temp);
+                audioUnlocked = true;
+            }
+            // 加载音色
+            if(!voiceCache) await loadVoice();
+            const voice = voiceCache;
             function speakOnce() {
                 utterance = new SpeechSynthesisUtterance(text);
                 utterance.voice = voice;
                 utterance.rate = 0.85;
                 utterance.pitch = 1.02;
+                utterance.volume = 1;
                 window.speechSynthesis.speak(utterance);
             }
             speakOnce();
@@ -149,13 +188,18 @@
 
         // 停止单句朗读
         function stopSingleSentence() {
-            window.speechSynthesis.cancel();
-            clearInterval(singleLoopTimer);
+            stopAllAudio();
         }
 
         // 整篇顺序循环朗读
-        function playAllArticle() {
+        async function playAllArticle() {
             stopAllAudio();
+            if(!audioUnlocked){
+                const temp = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(temp);
+                audioUnlocked = true;
+            }
+            if(!voiceCache) await loadVoice();
             allTextList = [];
             document.querySelectorAll(".sentence-wrap").forEach(item => {
                 allTextList.push(item.dataset.sentence);
@@ -167,11 +211,12 @@
         function playNextAll() {
             if (allPlayIndex >= allTextList.length) allPlayIndex = 0;
             const txt = allTextList[allPlayIndex];
-            const voice = getAmericanNewsVoice();
+            const voice = voiceCache;
             utterance = new SpeechSynthesisUtterance(txt);
             utterance.voice = voice;
             utterance.rate = 0.85;
             utterance.pitch = 1.02;
+            utterance.volume = 1;
             utterance.onend = () => {
                 allPlayIndex++;
                 allPlayTimeout = setTimeout(playNextAll, 700);
@@ -179,27 +224,18 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // 停止所有语音
-        function stopAllAudio() {
-            window.speechSynthesis.cancel();
-            clearInterval(singleLoopTimer);
-            clearTimeout(allPlayTimeout);
-            allPlayIndex = 9999;
-        }
-
         // 绑定页面按钮事件
-        window.speechSynthesis.onvoiceschanged = () => {};
         document.querySelectorAll(".play-sent").forEach(btn => {
-            btn.onclick = function () {
+            btn.addEventListener("click", function () {
                 const wrap = this.closest(".sentence-wrap");
                 readSingleSentence(wrap.dataset.sentence);
-            }
+            })
         });
         document.querySelectorAll(".stop-sent").forEach(btn => {
-            btn.onclick = stopSingleSentence;
+            btn.addEventListener("click", stopSingleSentence);
         });
-        document.getElementById("playAll").onclick = playAllArticle;
-        document.getElementById("stopAll").onclick = stopAllAudio;
+        document.getElementById("playAll").addEventListener("click", playAllArticle);
+        document.getElementById("stopAll").addEventListener("click", stopAllAudio);
     </script>
 </body>
 </html>
