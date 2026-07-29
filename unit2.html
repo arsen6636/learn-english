@@ -1,295 +1,679 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>九全Unit2 美式跟读短文｜AI跟读版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Lovely Traditional Festivals</title>
     <style>
+        /* ===== 全局重置 & 校园清新风格 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-size: 18px;
-            line-height: 1.8;
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 25px;
-            font-family: "Microsoft Yahei", Arial, sans-serif;
+            font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f9f5;
+            color: #2c4a2e;
+            padding: 20px 16px 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
         }
-        .warn {
-            color: #ff3333;
+
+        .app {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(60, 100, 70, 0.10);
+            padding: 28px 22px 36px;
+            transition: all 0.2s;
+        }
+
+        .header {
             text-align: center;
-            font-weight: bold;
-            margin: 12px 0;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 2px dashed #d4e8d4;
         }
-        .unlock-box {
-            text-align: center;
-            margin: 25px 0;
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #2a5e3a;
+            background: linear-gradient(145deg, #2a5e3a, #3d7a4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .sentence-wrap {
-            margin: 16px 0;
-            padding-bottom: 10px;
+        .header .sub {
+            font-size: 14px;
+            color: #6b8f72;
+            margin-top: 6px;
+            letter-spacing: 2px;
         }
-        button {
-            padding: 10px 14px;
-            margin: 8px 6px;
-            cursor: pointer;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            min-height: 48px;
-            min-width: 100px;
+
+        /* 句子卡片 */
+        .sentence {
+            background: #fafffa;
+            border-radius: 20px;
+            padding: 18px 18px 14px;
+            margin-bottom: 18px;
+            border: 1px solid #e4f0e4;
+            transition: background 0.25s, border-color 0.25s, box-shadow 0.3s;
+            box-shadow: 0 2px 6px rgba(60, 100, 70, 0.04);
         }
-        .btn-unlock {
-            background: #28a745;
-            color: #fff;
+        .sentence.active {
+            background: #edf7ed;
+            border-color: #7bb57b;
+            box-shadow: 0 4px 16px rgba(70, 140, 80, 0.15);
         }
-        .btn-read {
-            background: #3377dd;
-            color: #fff;
+
+        .en {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #1d3a22;
+            font-weight: 450;
+            word-break: break-word;
         }
-        .btn-repeat {
-            background: #9933ff;
-            color: #fff;
-        }
-        .btn-stop {
-            background: #e54343;
-            color: #fff;
-        }
-        .word-bold {
+        .word {
             font-weight: 700;
-            font-size: 19px;
+            color: #b4433c;
         }
-        .phonetic {
-            color: red;
+        .note {
+            font-weight: 400;
+            color: #b4433c;
+            font-size: 0.85em;
+            background: #fef0ee;
+            padding: 0 4px;
+            border-radius: 4px;
+            white-space: nowrap;
         }
-        .trans-title {
-            margin-top: 50px;
-            font-size: 21px;
-            font-weight: bold;
+
+        .zh {
+            font-size: 15px;
+            color: #4e6e54;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dotted #dce8dc;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
         }
-        .global-control {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #999;
-            text-align: center;
+
+        /* 控制按钮 */
+        .sentence-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            align-items: center;
         }
+        .sentence-controls button {
+            background: #eaf3ea;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2a5e3a;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .sentence-controls button:active {
+            transform: scale(0.94);
+        }
+        .sentence-controls .play-btn {
+            background: #cbe3cb;
+            color: #1d4a2a;
+        }
+        .sentence-controls .play-btn:active {
+            background: #b3d4b3;
+        }
+        .sentence-controls .pause-btn {
+            background: #f0e8d8;
+            color: #7a6a4a;
+        }
+        .sentence-controls .pause-btn:active {
+            background: #e6dcca;
+        }
+        .sentence-controls .status-badge {
+            font-size: 13px;
+            color: #6f8f72;
+            margin-left: 4px;
+            font-weight: 400;
+        }
+
+        /* 全局控制 */
+        .global-controls {
+            margin-top: 28px;
+            padding: 18px 16px 16px;
+            background: #eef6ee;
+            border-radius: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 14px 20px;
+            border: 1px solid #d4e8d4;
+        }
+        .global-controls .ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .global-controls button {
+            background: #ffffff;
+            border: 1px solid #bdd6bd;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2a5e3a;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            touch-action: manipulation;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+        .global-controls button:active {
+            transform: scale(0.94);
+        }
+        .global-controls .btn-loop {
+            background: #d4e8d4;
+            border-color: #8bb88b;
+        }
+        .global-controls .btn-loop.active-loop {
+            background: #7bb57b;
+            color: #fff;
+            border-color: #5a9a5a;
+        }
+        .global-controls .btn-stop {
+            background: #f5e8e8;
+            border-color: #dbb8b8;
+            color: #8a4a4a;
+        }
+        .global-controls .loop-info {
+            font-size: 14px;
+            color: #3d6b44;
+            background: #ffffffcc;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-weight: 500;
+            border: 1px solid #d4e8d4;
+        }
+        .global-status {
+            font-size: 14px;
+            color: #4e6e54;
+        }
+
+        /* 完整翻译 */
+        .full-translation {
+            margin-top: 32px;
+            padding: 22px 20px 18px;
+            background: #f7fbf7;
+            border-radius: 24px;
+            border: 1px solid #dfecdf;
+        }
+        .full-translation .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a7a52;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .full-translation .label::before {
+            content: '📖';
+            font-size: 18px;
+        }
+        .full-translation .zh-full {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #2a4a30;
+            letter-spacing: 0.5px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .app { padding: 16px 12px 24px; }
+            .header h1 { font-size: 21px; }
+            .en { font-size: 15.5px; }
+            .note { font-size: 0.8em; white-space: normal; }
+            .zh { font-size: 14px; }
+            .sentence { padding: 14px 14px 12px; }
+            .sentence-controls button { padding: 7px 14px; font-size: 13px; }
+            .global-controls { padding: 14px 12px; gap: 10px; }
+            .global-controls button { padding: 8px 16px; font-size: 14px; }
+            .full-translation { padding: 16px 14px; }
+            .full-translation .zh-full { font-size: 14.5px; }
+        }
+        @media (min-width: 768px) {
+            .en { font-size: 19px; }
+            .sentence { padding: 22px 26px 16px; }
+        }
+        button { -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 6px; background: #e8f0e8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #b0cbb0; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="warn">操作顺序：先点绿色解锁按钮 → 再朗读，推荐使用Google Chrome浏览器</div>
-    <div class="unlock-box">
-        <button class="btn-unlock" id="unlockAudio">🔓 首次点击解锁音频权限</button>
+
+<div class="app" id="app">
+    <div class="header">
+        <h1>🌙 Lovely Traditional Festivals</h1>
+        <div class="sub">✦ 九年级 · Unit 2 课标单词全覆盖 ✦</div>
     </div>
 
-    <h2>Lovely Traditional Festivals</h2>
+    <div id="sentenceContainer"></div>
 
-    <div class="sentence-wrap" data-sentence="I love the old tradition of enjoying the moon with my relative on Mid-Autumn night.">
-        I love the old <span class="word-bold">tradition</span> <span class="phonetic">(/trəˈdɪʃn/ n. 传统；习俗)</span> of enjoying the moon with my <span class="word-bold">relative</span> <span class="phonetic">(/ˈrelətɪv/ n. 亲属；亲戚)</span> on Mid-Autumn night.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
+    <div class="global-controls" id="globalControls">
+        <div class="ctrl-group">
+            <button class="btn-loop" id="btnLoop">🔁 循环播放</button>
+            <span class="loop-info" id="loopInfo">0 / 10</span>
+            <button class="btn-stop" id="btnStop">⏹ 停止全部</button>
+        </div>
+        <div class="ctrl-group">
+            <span class="global-status" id="globalStatus">● 就绪</span>
+        </div>
     </div>
 
-    <div class="sentence-wrap" data-sentence="I really admire the ancient story of Chang’e.">
-        I really <span class="word-bold">admire</span> <span class="phonetic">(/ədˈmaɪər/ v. 欣赏；仰慕)</span> the ancient <span class="word-bold">story</span> <span class="phonetic">(/ˈstɔːri/ n. 故事；传说)</span> of Chang’e.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
+    <div class="full-translation">
+        <div class="label">完整中文翻译</div>
+        <div class="zh-full" id="fullTranslation">
+            我喜爱中秋夜晚和亲人一同赏月的古老习俗。我十分欣赏嫦娥的古老传说。坏人想要偷走后羿的仙药，于是嫦娥喝下仙药，独自飞向了月宫。<br><br>
+            人们会在院子里摆放月饼和水果来思念她。泼水节是泰国人民庆祝新年的日子。圣诞节并没有可怕的鬼魂，但有些孩子喜欢捉弄他们的父母。<br><br>
+            这些节日带给我们许多温暖，提醒我们珍惜亲情。
+        </div>
     </div>
+</div>
 
-    <div class="sentence-wrap" data-sentence="Bad men wanted to steal Hou Yi’s magic medicine, so Chang’e drank it and flew to the moon alone.">
-        Bad men wanted to <span class="word-bold">steal</span> <span class="phonetic">(/stiːl/ v. 偷；窃取)</span> Hou Yi’s magic medicine, so Chang’e drank it and flew to the moon alone.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-
-    <div class="sentence-wrap" data-sentence="People lay mooncakes and fruit in yards to miss her.">
-        People <span class="word-bold">lay</span> <span class="phonetic">(/leɪ/ v. 放置；安放)</span> mooncakes and fruit in yards to miss her.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-
-    <div class="sentence-wrap" data-sentence="The Water Festival is a time for Thai people to celebrate their new year.">
-        The Water Festival is a time for Thai people to <span class="word-bold">celebrate</span> <span class="phonetic">(/ˈselɪbreɪt/ v. 庆祝；庆贺)</span> their new year.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-
-    <div class="sentence-wrap" data-sentence="Christmas has no scary ghost, but some kids like to trick their parents.">
-        Christmas has no scary <span class="word-bold">ghost</span> <span class="phonetic">(/ɡoʊst/ n. 鬼魂；幽灵)</span>, but some kids like to <span class="word-bold">trick</span> <span class="phonetic">(/trɪk/ v. 捉弄；欺骗)</span> their parents.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-
-    <div class="sentence-wrap" data-sentence="These festivals bring us much warmth and remind us to value family love.">
-        These festivals bring us much <span class="word-bold">warmth</span> <span class="phonetic">(/wɔːrmθ/ n. 温暖；暖和)</span> and remind us to value family love.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-
-    <div class="trans-title">全文中文翻译</div>
-    <p>美好的传统节日</p>
-    <p>我喜爱中秋夜晚和亲人一同赏月的古老习俗。我十分欣赏嫦娥的古老传说。坏人想要偷走后羿的仙药，于是嫦娥喝下仙药，独自飞向了月宫。</p>
-    <p>人们会在院子里摆放月饼和水果来思念她。泼水节是泰国人民庆祝新年的日子。圣诞节并没有可怕的鬼魂，但有些孩子喜欢捉弄他们的父母。</p>
-    <p>这些节日带给我们许多温暖，提醒我们珍惜亲情。</p>
-
-    <!-- 全局控制按钮 -->
-    <div class="global-control">
-        <button class="btn-read" id="readAll">整篇顺序朗读</button>
-        <button class="btn-repeat" id="repeatAll">整篇循环跟读</button>
-        <button class="btn-stop" id="stopAll">全部暂停</button>
-    </div>
-
-    <script>
-        // 全局变量
-        let audioUnlocked = false;
-        let targetVoice = null;
-        const SPEECH_RATE = 0.85;
-        const SPEECH_VOLUME = 1;
-        const PAUSE_DELAY = 1200; // 跟读停顿时间，单位毫秒
-
-        // 强制停止所有语音
-        function stopAllSpeech() {
-            window.speechSynthesis.cancel();
+<script>
+    // ================================================================
+    //  1. 句子数据（共9句，包含所有Unit 2课标单词注释）
+    // ================================================================
+    const sentencesData = [
+        {
+            enHTML: `I love the old <span class="word">tradition</span><span class="note"> (/trəˈdɪʃn/ n. 传统；习俗)</span> of enjoying the moon with my <span class="word">relative</span><span class="note"> (/ˈrelətɪv/ n. 亲属；亲戚)</span> on Mid-Autumn night.`,
+            enText: "I love the old tradition of enjoying the moon with my relative on Mid-Autumn night.",
+            zh: "我喜爱中秋夜晚和亲人一同赏月的古老习俗。"
+        },
+        {
+            enHTML: `I really <span class="word">admire</span><span class="note"> (/ədˈmaɪə(r)/ v. 欣赏；仰慕)</span> the ancient <span class="word">story</span><span class="note"> (/ˈstɔːri/ n. 故事；传说)</span> of Chang'e.`,
+            enText: "I really admire the ancient story of Chang'e.",
+            zh: "我十分欣赏嫦娥的古老传说。"
+        },
+        {
+            enHTML: `Bad men wanted to <span class="word">steal</span><span class="note"> (/stiːl/ v. 偷；窃取)</span> Hou Yi's magic medicine, so Chang'e drank it and flew to the moon alone.`,
+            enText: "Bad men wanted to steal Hou Yi's magic medicine, so Chang'e drank it and flew to the moon alone.",
+            zh: "坏人想要偷走后羿的仙药，于是嫦娥喝下仙药，独自飞向了月宫。"
+        },
+        {
+            enHTML: `People <span class="word">lay</span><span class="note"> (/leɪ/ v. 放置；安放)</span> mooncakes and fruit in yards to miss her.`,
+            enText: "People lay mooncakes and fruit in yards to miss her.",
+            zh: "人们会在院子里摆放月饼和水果来思念她。"
+        },
+        {
+            enHTML: `The Water Festival is a time for Thai people to <span class="word">celebrate</span><span class="note"> (/ˈselɪbreɪt/ v. 庆祝；庆贺)</span> their new year.`,
+            enText: "The Water Festival is a time for Thai people to celebrate their new year.",
+            zh: "泼水节是泰国人民庆祝新年的日子。"
+        },
+        {
+            enHTML: `Christmas has no scary <span class="word">ghost</span><span class="note"> (/ɡəʊst/ n. 鬼魂；幽灵)</span>, but some kids like to <span class="word">trick</span><span class="note"> (/trɪk/ v. 捉弄；欺骗)</span> their parents.`,
+            enText: "Christmas has no scary ghost, but some kids like to trick their parents.",
+            zh: "圣诞节并没有可怕的鬼魂，但有些孩子喜欢捉弄他们的父母。"
+        },
+        {
+            enHTML: `These festivals bring us much <span class="word">warmth</span><span class="note"> (/wɔːmθ/ n. 温暖；暖和)</span> and remind us to value family love.`,
+            enText: "These festivals bring us much warmth and remind us to value family love.",
+            zh: "这些节日带给我们许多温暖，提醒我们珍惜亲情。"
         }
+    ];
 
-        // 加载美式语音音色
-        function loadVoiceResource() {
+    // ================================================================
+    //  2. 状态管理
+    // ================================================================
+    const state = {
+        isPlaying: new Array(sentencesData.length).fill(false),
+        isPaused: new Array(sentencesData.length).fill(false),
+        utterances: new Array(sentencesData.length).fill(null),
+        currentIndex: -1,
+        loopCount: 0,
+        maxLoop: 10,
+        isLooping: false,
+        voice: null,
+        currentUtterance: null,
+        currentIdx: -1,
+    };
+
+    const container = document.getElementById('sentenceContainer');
+    const btnLoop = document.getElementById('btnLoop');
+    const btnStop = document.getElementById('btnStop');
+    const loopInfo = document.getElementById('loopInfo');
+    const globalStatus = document.getElementById('globalStatus');
+
+    // ================================================================
+    //  3. 渲染句子
+    // ================================================================
+    function renderSentences() {
+        let html = '';
+        sentencesData.forEach((item, idx) => {
+            html += `
+                <div class="sentence" data-index="${idx}" id="sentence-${idx}">
+                    <div class="en">${item.enHTML}</div>
+                    <div class="zh">${item.zh}</div>
+                    <div class="sentence-controls">
+                        <button class="play-btn" data-index="${idx}">▶ 播放</button>
+                        <button class="pause-btn" data-index="${idx}">⏸ 暂停</button>
+                        <span class="status-badge" id="status-${idx}">● 待播</span>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+
+        // 绑定事件
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.index, 10);
+                playSentence(idx);
+            });
+        });
+        document.querySelectorAll('.pause-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.index, 10);
+                pauseSentence(idx);
+            });
+        });
+    }
+
+    // ================================================================
+    //  4. 语音合成
+    // ================================================================
+    function getVoice() {
+        return new Promise((resolve) => {
             const voices = window.speechSynthesis.getVoices();
-            // 优先美式新闻/标准女声
-            let usVoice = voices.find(v => v.lang === "en-US" && (v.name.includes("Samantha") || v.name.includes("Jenny")));
-            if (!usVoice) usVoice = voices.find(v => v.lang === "en-US");
-            if (!usVoice) usVoice = voices[0];
-            targetVoice = usVoice;
-        }
-        window.speechSynthesis.onvoiceschanged = loadVoiceResource;
-
-        // 解锁音频权限（同步点击触发，绕过浏览器拦截）
-        document.getElementById("unlockAudio").addEventListener("click", function () {
-            if (!window.speechSynthesis) {
-                alert("当前浏览器不支持语音朗读，请更换Google Chrome！");
-                return;
-            }
-            stopAllSpeech();
-            // 静音语音解锁通道
-            const unlockUtter = new SpeechSynthesisUtterance("Hello");
-            unlockUtter.volume = 0;
-            window.speechSynthesis.speak(unlockUtter);
-            audioUnlocked = true;
-            alert("音频解锁成功，现在可以正常朗读跟读！");
-        })
-
-        // 单次朗读句子基础函数
-        function speakSingleText(text, callback) {
-            if (!audioUnlocked) {
-                alert("请先点击上方绿色【🔓 首次点击解锁音频权限】按钮！");
-                return;
-            }
-            stopAllSpeech();
-            const utter = new SpeechSynthesisUtterance(text);
-            if (targetVoice) utter.voice = targetVoice;
-            utter.rate = SPEECH_RATE;
-            utter.volume = SPEECH_VOLUME;
-            utter.pitch = 1.02;
-            // 朗读完成执行回调（跟读重复）
-            if (typeof callback === "function") utter.onend = callback;
-            window.speechSynthesis.speak(utter);
-        }
-
-        // 单句AI跟读重复：读一遍→停顿→再读一遍
-        function repeatRead(text) {
-            speakSingleText(text, () => {
+            if (voices.length > 0) {
+                let selected = voices.find(v =>
+                    v.lang.startsWith('en-US') &&
+                    (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha'))
+                );
+                if (!selected) selected = voices.find(v => v.lang.startsWith('en-US'));
+                if (!selected) selected = voices.find(v => v.lang.startsWith('en'));
+                resolve(selected || voices[0] || null);
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    const vs = window.speechSynthesis.getVoices();
+                    let selected = vs.find(v =>
+                        v.lang.startsWith('en-US') &&
+                        (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha'))
+                    );
+                    if (!selected) selected = vs.find(v => v.lang.startsWith('en-US'));
+                    if (!selected) selected = vs.find(v => v.lang.startsWith('en'));
+                    resolve(selected || vs[0] || null);
+                };
                 setTimeout(() => {
-                    speakSingleText(text);
-                }, PAUSE_DELAY);
-            })
+                    const vs = window.speechSynthesis.getVoices();
+                    resolve(vs[0] || null);
+                }, 1000);
+            }
+        });
+    }
+
+    getVoice().then(v => { state.voice = v; });
+
+    // ================================================================
+    //  5. 播放 / 暂停 单句
+    // ================================================================
+    function playSentence(idx) {
+        if (idx < 0 || idx >= sentencesData.length) return;
+
+        // 如果正在循环，停止循环
+        if (state.isLooping) {
+            stopLoop();
         }
 
-        // 整篇顺序朗读
-        function readWholeArticle() {
-            if (!audioUnlocked) {
-                alert("请先解锁音频！");
-                return;
-            }
-            stopAllSpeech();
-            const sentenceList = [];
-            document.querySelectorAll(".sentence-wrap").forEach(item => {
-                sentenceList.push(item.dataset.sentence);
-            })
-            let index = 0;
-            function playNext() {
-                if (index >= sentenceList.length) return;
-                const txt = sentenceList[index];
-                const utter = new SpeechSynthesisUtterance(txt);
-                if (targetVoice) utter.voice = targetVoice;
-                utter.rate = SPEECH_RATE;
-                utter.volume = SPEECH_VOLUME;
-                utter.pitch = 1.02;
-                utter.onend = () => {
-                    index++;
-                    setTimeout(playNext, PAUSE_DELAY);
+        // 停止当前任何正在播放的句子
+        if (state.currentUtterance && state.currentIdx !== undefined) {
+            window.speechSynthesis.cancel();
+            state.isPlaying[state.currentIdx] = false;
+            state.isPaused[state.currentIdx] = false;
+            updateSentenceStatus(state.currentIdx);
+            clearHighlight(state.currentIdx);
+            state.currentUtterance = null;
+            state.currentIdx = -1;
+        }
+
+        const text = sentencesData[idx].enText;
+        const el = document.getElementById(`sentence-${idx}`);
+
+        clearHighlightAll();
+        el.classList.add('active');
+        state.currentIndex = idx;
+
+        state.isPlaying[idx] = true;
+        state.isPaused[idx] = false;
+        updateSentenceStatus(idx);
+        updateGlobalStatus(`朗读中 #${idx+1}`);
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.92;
+        utterance.pitch = 1.05;
+        utterance.volume = 1;
+        if (state.voice) utterance.voice = state.voice;
+        else {
+            const vs = window.speechSynthesis.getVoices();
+            const v = vs.find(v => v.lang.startsWith('en-US'));
+            if (v) utterance.voice = v;
+        }
+
+        state.currentUtterance = utterance;
+        state.currentIdx = idx;
+
+        utterance.onend = () => {
+            state.isPlaying[idx] = false;
+            state.isPaused[idx] = false;
+            updateSentenceStatus(idx);
+            clearHighlight(idx);
+            if (state.currentIndex === idx) state.currentIndex = -1;
+            state.currentUtterance = null;
+            state.currentIdx = -1;
+            updateGlobalStatus('就绪');
+
+            // 循环模式自动播下一句
+            if (state.isLooping) {
+                const nextIdx = idx + 1;
+                if (nextIdx < sentencesData.length) {
+                    setTimeout(() => playSentence(nextIdx), 400);
+                } else {
+                    state.loopCount++;
+                    updateLoopInfo();
+                    if (state.loopCount < state.maxLoop) {
+                        setTimeout(() => playSentence(0), 600);
+                    } else {
+                        stopAll();
+                        updateGlobalStatus(`✅ 已完成 ${state.maxLoop} 次循环`);
+                        state.isLooping = false;
+                        btnLoop.classList.remove('active-loop');
+                        btnLoop.textContent = '🔁 循环播放';
+                    }
                 }
-                window.speechSynthesis.speak(utter);
             }
-            playNext();
-        }
+        };
 
-        // 整篇循环跟读（无限循环整篇）
-        function repeatWholeArticle() {
-            if (!audioUnlocked) {
-                alert("请先解锁音频！");
-                return;
+        utterance.onerror = (e) => {
+            console.warn('语音错误:', e);
+            state.isPlaying[idx] = false;
+            state.isPaused[idx] = false;
+            updateSentenceStatus(idx);
+            clearHighlight(idx);
+            state.currentUtterance = null;
+            state.currentIdx = -1;
+            updateGlobalStatus('⚠️ 语音错误');
+            if (state.isLooping) {
+                state.isLooping = false;
+                btnLoop.classList.remove('active-loop');
+                btnLoop.textContent = '🔁 循环播放';
             }
-            stopAllSpeech();
-            const sentenceList = [];
-            document.querySelectorAll(".sentence-wrap").forEach(item => {
-                sentenceList.push(item.dataset.sentence);
-            })
-            let index = 0;
-            function playLoop() {
-                if (index >= sentenceList.length) index = 0;
-                const txt = sentenceList[index];
-                const utter = new SpeechSynthesisUtterance(txt);
-                if (targetVoice) utter.voice = targetVoice;
-                utter.rate = SPEECH_RATE;
-                utter.volume = SPEECH_VOLUME;
-                utter.pitch = 1.02;
-                utter.onend = () => {
-                    index++;
-                    setTimeout(playLoop, PAUSE_DELAY);
+        };
+
+        window.speechSynthesis.speak(utterance);
+        state.utterances[idx] = utterance;
+    }
+
+    function pauseSentence(idx) {
+        if (idx < 0 || idx >= sentencesData.length) return;
+        if (state.isPlaying[idx]) {
+            if (state.currentUtterance && state.currentIdx === idx) {
+                window.speechSynthesis.cancel();
+                state.isPlaying[idx] = false;
+                state.isPaused[idx] = true;
+                updateSentenceStatus(idx);
+                updateGlobalStatus(`已暂停 #${idx+1}`);
+                clearHighlight(idx);
+                state.currentUtterance = null;
+                state.currentIdx = -1;
+            }
+        } else if (state.isPaused[idx]) {
+            // 恢复播放（重新播放）
+            state.isPaused[idx] = false;
+            playSentence(idx);
+        } else {
+            updateSentenceStatus(idx);
+        }
+    }
+
+    // ================================================================
+    //  6. 全局控制
+    // ================================================================
+    function stopAll() {
+        window.speechSynthesis.cancel();
+        for (let i = 0; i < sentencesData.length; i++) {
+            state.isPlaying[i] = false;
+            state.isPaused[i] = false;
+            updateSentenceStatus(i);
+            clearHighlight(i);
+        }
+        state.currentIndex = -1;
+        state.currentUtterance = null;
+        state.currentIdx = -1;
+        if (state.isLooping) {
+            state.isLooping = false;
+            btnLoop.classList.remove('active-loop');
+            btnLoop.textContent = '🔁 循环播放';
+        }
+        state.loopCount = 0;
+        updateLoopInfo();
+        updateGlobalStatus('已停止');
+    }
+
+    function stopLoop() {
+        state.isLooping = false;
+        btnLoop.classList.remove('active-loop');
+        btnLoop.textContent = '🔁 循环播放';
+        state.loopCount = 0;
+        updateLoopInfo();
+        updateGlobalStatus('已取消循环');
+    }
+
+    function toggleLoop() {
+        if (state.isLooping) {
+            stopLoop();
+        } else {
+            state.isLooping = true;
+            state.loopCount = 0;
+            btnLoop.classList.add('active-loop');
+            btnLoop.textContent = '🔁 循环中';
+            updateLoopInfo();
+            updateGlobalStatus('🔄 循环模式开启');
+
+            // 如果当前没有播放，从第一句开始
+            const anyPlaying = state.isPlaying.some(v => v === true);
+            if (!anyPlaying) {
+                window.speechSynthesis.cancel();
+                for (let i = 0; i < sentencesData.length; i++) {
+                    state.isPlaying[i] = false;
+                    state.isPaused[i] = false;
+                    updateSentenceStatus(i);
+                    clearHighlight(i);
                 }
-                window.speechSynthesis.speak(utter);
+                state.currentIndex = -1;
+                state.currentUtterance = null;
+                state.currentIdx = -1;
+                setTimeout(() => playSentence(0), 300);
+            } else {
+                // 已有播放，等待 onend 自动继续
             }
-            playLoop();
         }
+    }
 
-        // 绑定单句朗读按钮
-        document.querySelectorAll(".read-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const text = this.closest(".sentence-wrap").dataset.sentence;
-                speakSingleText(text);
-            })
-        })
-        // 绑定AI跟读重复按钮
-        document.querySelectorAll(".repeat-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const text = this.closest(".sentence-wrap").dataset.sentence;
-                repeatRead(text);
-            })
-        })
-        // 全部停止按钮
-        document.querySelectorAll(".stop-btn").forEach(btn => {
-            btn.addEventListener("click", stopAllSpeech);
-        })
-        // 全局整篇朗读
-        document.getElementById("readAll").addEventListener("click", readWholeArticle);
-        // 全局整篇循环跟读
-        document.getElementById("repeatAll").addEventListener("click", repeatWholeArticle);
-        // 全局停止
-        document.getElementById("stopAll").addEventListener("click", stopAllSpeech);
-    </script>
+    // ================================================================
+    //  7. UI 更新辅助
+    // ================================================================
+    function updateSentenceStatus(idx) {
+        const el = document.getElementById(`status-${idx}`);
+        if (!el) return;
+        if (state.isPlaying[idx]) {
+            el.textContent = '🔊 朗读中';
+            el.style.color = '#2a7a3a';
+        } else if (state.isPaused[idx]) {
+            el.textContent = '⏸ 已暂停';
+            el.style.color = '#b88a3a';
+        } else {
+            el.textContent = '● 待播';
+            el.style.color = '#6f8f72';
+        }
+    }
+
+    function clearHighlight(idx) {
+        const el = document.getElementById(`sentence-${idx}`);
+        if (el) el.classList.remove('active');
+    }
+
+    function clearHighlightAll() {
+        document.querySelectorAll('.sentence.active').forEach(el => el.classList.remove('active'));
+    }
+
+    function updateLoopInfo() {
+        loopInfo.textContent = `${state.loopCount} / ${state.maxLoop}`;
+    }
+
+    function updateGlobalStatus(msg) {
+        globalStatus.textContent = `● ${msg}`;
+    }
+
+    // ================================================================
+    //  8. 初始化
+    // ================================================================
+    function init() {
+        renderSentences();
+        btnLoop.addEventListener('click', toggleLoop);
+        btnStop.addEventListener('click', stopAll);
+        updateLoopInfo();
+        updateGlobalStatus('就绪');
+        getVoice().then(v => { if (v) state.voice = v; });
+        if (window.speechSynthesis) window.speechSynthesis.getVoices();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            getVoice().then(v => { if (v) state.voice = v; });
+        }
+    });
+
+    console.log('✅ Lovely Traditional Festivals H5 | 所有课标单词已覆盖');
+</script>
 </body>
 </html>
