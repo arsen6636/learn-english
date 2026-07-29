@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- 适配手机缩放 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>九全Unit1 美式跟读短文|A Good Way to Learn English</title>
+    <title>九全Unit1 标准美式AI跟读修复版</title>
     <style>
         body {
             font-size: 18px;
@@ -14,35 +13,45 @@
             padding: 0 25px;
             font-family: "Microsoft Yahei", Arial, sans-serif;
         }
-        h2 {
-            color: #111;
+        .warn {
+            color: #ff3333;
             text-align: center;
-            margin-bottom: 30px;
+            font-weight: bold;
+            margin: 12px 0;
         }
-        .tip {
-            color: #f00;
+        .unlock-box {
             text-align: center;
-            margin: 10px 0;
+            margin: 25px 0;
         }
         .sentence-wrap {
-            margin: 14px 0;
-            padding-bottom: 8px;
+            margin: 16px 0;
+            padding-bottom: 10px;
         }
         button {
-            padding: 8px 14px;
-            margin: 6px 8px;
+            padding: 10px 14px;
+            margin: 8px 6px;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 16px;
+            min-height: 48px;
+            min-width: 100px;
+        }
+        .btn-unlock {
+            background: #28a745;
+            color: #fff;
+        }
+        .btn-read {
             background: #3377dd;
             color: #fff;
-            font-size: 16px;
-            /* 手机触屏最低标准尺寸 */
-            min-height: 44px;
-            min-width: 90px;
         }
-        button.stop {
+        .btn-repeat {
+            background: #9933ff;
+            color: #fff;
+        }
+        .btn-stop {
             background: #e54343;
+            color: #fff;
         }
         .word-bold {
             font-weight: 700;
@@ -65,227 +74,287 @@
     </style>
 </head>
 <body>
-    <div class="tip">手机端请手动点击按钮解锁音频，刷新页面后重新点击播放</div>
+    <div class="warn">操作顺序：先点绿色解锁按钮 → 再朗读，推荐Google Chrome，语音强制标准美式口音</div>
+    <div class="unlock-box">
+        <button class="btn-unlock" id="unlockAudio">🔓 首次点击解锁音频权限</button>
+    </div>
+
     <h2>A Good Way to Learn English</h2>
     <!-- 第一段 -->
     <div class="sentence-wrap" data-sentence="As a Grade Nine student, I used to hide behind my textbook and dare not take part in any conversation in English class.">
         As a Grade Nine student, I used to hide behind my <span class="word-bold">textbook</span> <span class="phonetic">(/ˈtekstbʊk/ n. 教科书；课本)</span> and dare not take part in any <span class="word-bold">conversation</span> <span class="phonetic">(/ˌkɑːnvərˈseɪʃn/ n. 交谈；谈话)</span> in English class.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="My pronunciation was terrible, so I never read aloud or spoke full sentence.">
         My <span class="word-bold">pronunciation</span> <span class="phonetic">(/prəˌnʌnsiˈeɪʃn/ n. 发音；读音)</span> was terrible, so I never read <span class="word-bold">aloud</span> <span class="phonetic">(/əˈlaʊd/ adv. 大声地；出声地)</span> or spoke full <span class="word-bold">sentence</span> <span class="phonetic">(/ˈsentəns/ n. 句子)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="At that time, I lacked patience and thought learning English was too hard.">
         At that time, I lacked patience and thought learning English was too hard.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="Luckily, my English teacher was very patient with me and told me the secret of language learning.">
         Luckily, my English teacher was very <span class="word-bold">patient</span> <span class="phonetic">(/ˈpeɪʃnt/ adj. 有耐心的; n. 病人)</span> with me and told me the <span class="word-bold">secret</span> <span class="phonetic">(/ˈsiːkrət/ n. 秘密；秘诀; adj. 秘密的)</span> of language learning.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <!-- 第二段 -->
     <div class="sentence-wrap" data-sentence="She said we should watch English films and understand the expression on actors’ faces.">
         She said we should watch English films and understand the <span class="word-bold">expression</span> <span class="phonetic">(/ɪkˈspreʃn/ n. 表达（方式）；表情)</span> on actors’ faces.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="I soon discovered that listening to interesting materials really helped.">
         I soon <span class="word-bold">discover</span> <span class="phonetic">(/dɪˈskʌvər/ v. 发现；发觉)</span> that listening to interesting materials really helped.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="When I met new words, I would look them up in the dictionary.">
         When I met new words, I would look them up in the dictionary.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="Besides, I spent much time learning grammar and repeat useful sentences every day.">
         Besides, I spent much time learning <span class="word-bold">grammar</span> <span class="phonetic">(/ˈɡræmər/ n. 语法)</span> and <span class="word-bold">repeat</span> <span class="phonetic">(/rɪˈpiːt/ v. 重复；重做)</span> useful sentences every day.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="I also took clear note and made word cards with my pen pal.">
         I also took clear <span class="word-bold">note</span> <span class="phonetic">(/noʊt/ n. 笔记；记录; v. 注意；记录)</span> and made word cards with my pen <span class="word-bold">pal</span> <span class="phonetic">(/pæl/ n. 朋友；伙伴)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <!-- 第三段 -->
     <div class="sentence-wrap" data-sentence="We also study physics and chemistry this term, but I still spare time to memorize words and master sentence pattern.">
         We also study <span class="word-bold">physics</span> <span class="phonetic">(/ˈfɪzɪks/ n. 物理；物理学)</span> and <span class="word-bold">chemistry</span> <span class="phonetic">(/ˈkemɪstri/ n. 化学)</span> this term, but I still spare time to <span class="word-bold">memorize</span> <span class="phonetic">(/ˈmeməraɪz/ v. 记忆；记住)</span> words and master sentence <span class="word-bold">pattern</span> <span class="phonetic">(/ˈpætn/ n. 模式；方式；句型)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="I practice how to pronounce difficult words correctly, which greatly increase my reading speed.">
         I practice how to <span class="word-bold">pronounce</span> <span class="phonetic">(/prəˈnaʊns/ v. 发音)</span> difficult words correctly, which greatly <span class="word-bold">increase</span> <span class="phonetic">(/ɪnˈkriːs/ v. 增加；增长)</span> my reading <span class="word-bold">speed</span> <span class="phonetic">(/spiːd/ n. 速度; v. 加速)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="I often practice oral English with my study partner.">
         I often practice oral English with my study <span class="word-bold">partner</span> <span class="phonetic">(/ˈpɑːrtnər/ n. 搭档；同伴)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <!-- 第四段 -->
     <div class="sentence-wrap" data-sentence="Everyone is born with the ability to learn.">
         Everyone is <span class="word-bold">born</span> <span class="phonetic">(/bɔːrn/ v. 出生; adj. 天生的)</span> with the <span class="word-bold">ability</span> <span class="phonetic">(/əˈbɪləti/ n. 能力；才能)</span> to learn.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="Good learners can create useful learning methods and use their brain to think active.">
         Good learners can <span class="word-bold">create</span> <span class="phonetic">(/kriˈeɪt/ v. 创造；创建)</span> useful learning methods and use their <span class="word-bold">brain</span> <span class="phonetic">(/breɪn/ n. 大脑)</span> to think <span class="word-bold">active</span> <span class="phonetic">(/ˈæktɪv/ adj. 活跃的；积极的)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="We must pay attention to learning rules and connect new words with interesting things.">
         We must pay <span class="word-bold">attention</span> <span class="phonetic">(/əˈtenʃn/ n. 注意；关注)</span> to learning rules and <span class="word-bold">connect</span> <span class="phonetic">(/kəˈnekt/ v.（使）连接；联系)</span> new words with interesting things.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="Language progress cannot come overnight.">
         Language progress cannot come <span class="word-bold">overnight</span> <span class="phonetic">(/ˌoʊvərˈnaɪt/ adv. 一夜之间；在夜间)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="We need to review knowledge regularly, for true knowledge comes from long-term efforts.">
         We need to <span class="word-bold">review</span> <span class="phonetic">(/rɪˈvjuː/ v.&n. 回顾；复习)</span> knowledge regularly, for true <span class="word-bold">knowledge</span> <span class="phonetic">(/ˈnɑːlɪdʒ/ n. 知识；学问)</span> comes from long-term efforts.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
     <div class="sentence-wrap" data-sentence="Learning is a lifelong journey, so we should plan our study wisely.">
         Learning is a <span class="word-bold">lifelong</span> <span class="phonetic">(/ˈlaɪflɔːŋ/ adj. 终身的；毕生的)</span> journey, so we should plan our study <span class="word-bold">wisely</span> <span class="phonetic">(/ˈwaɪzli/ adv. 明智地；聪明地)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="trans-title">全文中文翻译</div>
-    <p>作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。我的发音很差，所以从不大声朗读，也说不出完整的句子。那时候我缺乏耐心，总觉得英语太难学。幸运的是，我的英语老师对我十分有耐心，还告诉了我语言学习的秘诀。</p>
-    <p>她说我们可以多看英文电影，看懂演员脸上的表情表达。我很快发现听有趣的素材真的很有帮助。遇到生词时，我会在词典里查阅。除此之外，我会花大量时间学习语法，每天反复练习实用句型。我还会认真记笔记，和我的笔友一起制作单词卡片。</p>
-    <p>这学期我们同时学习物理和化学，但我依旧会抽出时间背单词、掌握各类句型。我反复练习难词的正确读法，这大幅提升了我的阅读速度。我经常和学习搭档一起练习英语口语。</p>
-    <p>每个人天生都拥有学习的能力。优秀的学习者会自创实用的学习方法，开动大脑积极思考。我们必须重视学习规律，把新单词和有趣的事物关联起来。语言能力不可能一夜速成。我们要定期复习知识，因为真正的知识来源于长久的付出。学习是一场终身的旅程，因此我们要明智地规划自己的学习。</p>
-    <!-- 全局整篇播放控制按钮 -->
+    <p>作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。我的发音很差，所以我从不大声朗读，也说不出完整的句子。那时候我缺乏耐心，觉得英语太难学。幸运的是，我的英语老师对我很有耐心，告诉了我学习语言的秘诀。</p>
+    <p>她说我们可以多看英文电影，看懂演员脸上的情绪表达。我很快发现听趣味材料真的很有用。遇到生词时，我会查词典。除此之外，我每天花大量时间学习语法、重复实用句型。我还认真记笔记，和笔友一起制作单词卡片。</p>
+    <p>这学期我们同时学习物理和化学，但我仍然抽出时间背诵单词、掌握句型。我练习准确读出难词，这大大提升了我的阅读速度。我经常和学习搭档练习口语。</p>
+    <p>每个人天生都具备学习的能力。优秀的学习者能创造实用的学习方法，勤于动脑、积极思考。我们必须重视学习规律，把新词和有趣的事物联系起来。语言的进步不可能一蹴而就。我们需要定期复习知识，真正的知识来自长期付出。学习是一场终身旅程，我们应当明智规划自己的学习。</p>
+
+    <!-- 全局控制按钮 -->
     <div class="global-control">
-        <button id="playAll">整篇循环播放</button>
-        <button id="stopAll" class="stop">全部暂停</button>
+        <button class="btn-read" id="readAll">整篇顺序朗读</button>
+        <button class="btn-repeat" id="repeatAll">整篇循环跟读</button>
+        <button class="btn-stop" id="stopAll">全部暂停</button>
     </div>
 
     <script>
-        // 全局语音变量
-        let utterance = null;
-        let singleLoopTimer = null;
-        let allTextList = [];
-        let allPlayIndex = 0;
-        let allPlayTimeout = null;
-        let voiceCache = null;
-        let audioUnlocked = false; // 手机音频解锁标记
+        // 全局变量
+        let audioUnlocked = false;
+        let targetVoice = null;
+        const SPEECH_RATE = 0.85;
+        const SPEECH_VOLUME = 1;
+        const PAUSE_DELAY = 1200;
 
-        // 异步预加载美式音色，解决手机音色加载延迟
-        function loadVoice() {
-            return new Promise((resolve) => {
-                const getVoices = () => {
-                    const voices = window.speechSynthesis.getVoices();
-                    if (voices.length === 0) {
-                        setTimeout(getVoices, 100);
-                        return;
-                    }
-                    let targetVoice = voices.find(v =>
-                        v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
-                    );
-                    if (!targetVoice) targetVoice = voices.find(v => v.lang === "en-US");
-                    voiceCache = targetVoice || voices[0];
-                    resolve(voiceCache);
-                };
-                getVoices();
-            })
-        }
-
-        // 统一清空所有语音与定时器
-        function stopAllAudio() {
+        // 强制停止所有语音
+        function stopAllSpeech() {
             window.speechSynthesis.cancel();
-            clearInterval(singleLoopTimer);
-            clearTimeout(allPlayTimeout);
-            singleLoopTimer = null;
-            allPlayTimeout = null;
-            allPlayIndex = 9999;
         }
 
-        // 单句循环朗读
-        async function readSingleSentence(text) {
-            stopAllAudio();
-            // 手机首次点击解锁音频权限（系统强制要求用户主动交互）
+        // 【核心：严格匹配标准美式 en-US 音色】
+        function loadVoiceResource() {
+            const voices = window.speechSynthesis.getVoices();
+            // 优先系统标准美式女声（Samantha / Jenny 主流美音）
+            let standardUsVoice = voices.find(v =>
+                v.lang === "en-US" && (v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("US"))
+            );
+            // 无新闻人声，降级任意标准美音
+            if (!standardUsVoice) standardUsVoice = voices.find(v => v.lang === "en-US");
+            // 完全无美音，弹窗提醒用户安装英文语音包
+            if (!standardUsVoice) {
+                alert("未检测到标准美式英语语音，请前往手机设置-无障碍-文字转语音，下载美式英文语音包！");
+            }
+            targetVoice = standardUsVoice;
+        }
+        window.speechSynthesis.onvoiceschanged = loadVoiceResource;
+
+        // 解锁音频权限（同步点击，绕过浏览器拦截）
+        document.getElementById("unlockAudio").addEventListener("click", function () {
+            if (!window.speechSynthesis) {
+                alert("当前浏览器不支持语音朗读，请使用Google Chrome！");
+                return;
+            }
+            stopAllSpeech();
+            const unlockUtter = new SpeechSynthesisUtterance("Hello");
+            unlockUtter.volume = 0;
+            window.speechSynthesis.speak(unlockUtter);
+            audioUnlocked = true;
+            alert("音频解锁成功，将使用标准美式口音朗读！");
+        })
+
+        // 单次朗读（强制绑定美音音色）
+        function speakSingleText(text, callback) {
             if (!audioUnlocked) {
-                const tempUtter = new SpeechSynthesisUtterance("");
-                window.speechSynthesis.speak(tempUtter);
-                audioUnlocked = true;
+                alert("请先点击上方绿色解锁按钮！");
+                return;
             }
-            // 加载缓存音色
-            if (!voiceCache) await loadVoice();
-            const voice = voiceCache;
-            function speakOnce() {
-                utterance = new SpeechSynthesisUtterance(text);
-                utterance.voice = voice;
-                utterance.rate = 0.85;
-                utterance.pitch = 1.02;
-                utterance.volume = 1;
-                window.speechSynthesis.speak(utterance);
+            if (!targetVoice) {
+                alert("缺少标准美式语音包，朗读会使用系统默认口音！");
             }
-            speakOnce();
-            singleLoopTimer = setInterval(speakOnce, text.length * 230);
+            stopAllSpeech();
+            const utter = new SpeechSynthesisUtterance(text);
+            if (targetVoice) utter.voice = targetVoice;
+            utter.rate = SPEECH_RATE;
+            utter.volume = SPEECH_VOLUME;
+            utter.pitch = 1.02;
+            if (typeof callback === "function") utter.onend = callback;
+            window.speechSynthesis.speak(utter);
         }
 
-        // 停止单句朗读
-        function stopSingleSentence() {
-            stopAllAudio();
-        }
-
-        // 整篇循环朗读
-        async function playAllArticle() {
-            stopAllAudio();
-            if (!audioUnlocked) {
-                const tempUtter = new SpeechSynthesisUtterance("");
-                window.speechSynthesis.speak(tempUtter);
-                audioUnlocked = true;
-            }
-            if (!voiceCache) await loadVoice();
-            allTextList = [];
-            document.querySelectorAll(".sentence-wrap").forEach(item => {
-                allTextList.push(item.dataset.sentence);
-            });
-            allPlayIndex = 0;
-            playNextAll();
-        }
-
-        function playNextAll() {
-            if (allPlayIndex >= allTextList.length) allPlayIndex = 0;
-            const txt = allTextList[allPlayIndex];
-            const voice = voiceCache;
-            utterance = new SpeechSynthesisUtterance(txt);
-            utterance.voice = voice;
-            utterance.rate = 0.85;
-            utterance.pitch = 1.02;
-            utterance.volume = 1;
-            utterance.onend = () => {
-                allPlayIndex++;
-                allPlayTimeout = setTimeout(playNextAll, 700);
-            };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // 绑定触屏标准事件
-        document.querySelectorAll(".play-sent").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const wrap = this.closest(".sentence-wrap");
-                readSingleSentence(wrap.dataset.sentence);
+        // 单句AI跟读：读一遍→停顿→再读一遍
+        function repeatRead(text) {
+            speakSingleText(text, () => {
+                setTimeout(() => {
+                    speakSingleText(text);
+                }, PAUSE_DELAY);
             })
-        });
-        document.querySelectorAll(".stop-sent").forEach(btn => {
-            btn.addEventListener("click", stopSingleSentence);
-        });
-        document.getElementById("playAll").addEventListener("click", playAllArticle);
-        document.getElementById("stopAll").addEventListener("click", stopAllAudio);
+        }
+
+        // 整篇顺序朗读
+        function readWholeArticle() {
+            if (!audioUnlocked) {
+                alert("请先解锁音频！");
+                return;
+            }
+            stopAllSpeech();
+            const sentenceList = [];
+            document.querySelectorAll(".sentence-wrap").forEach(item => {
+                sentenceList.push(item.dataset.sentence);
+            })
+            let index = 0;
+            function playNext() {
+                if (index >= sentenceList.length) return;
+                const txt = sentenceList[index];
+                const utter = new SpeechSynthesisUtterance(txt);
+                if (targetVoice) utter.voice = targetVoice;
+                utter.rate = SPEECH_RATE;
+                utter.volume = SPEECH_VOLUME;
+                utter.pitch = 1.02;
+                utter.onend = () => {
+                    index++;
+                    setTimeout(playNext, PAUSE_DELAY);
+                }
+                window.speechSynthesis.speak(utter);
+            }
+            playNext();
+        }
+
+        // 整篇无限循环跟读
+        function repeatWholeArticle() {
+            if (!audioUnlocked) {
+                alert("请先解锁音频！");
+                return;
+            }
+            stopAllSpeech();
+            const sentenceList = [];
+            document.querySelectorAll(".sentence-wrap").forEach(item => {
+                sentenceList.push(item.dataset.sentence);
+            })
+            let index = 0;
+            function playLoop() {
+                if (index >= sentenceList.length) index = 0;
+                const txt = sentenceList[index];
+                const utter = new SpeechSynthesisUtterance(txt);
+                if (targetVoice) utter.voice = targetVoice;
+                utter.rate = SPEECH_RATE;
+                utter.volume = SPEECH_VOLUME;
+                utter.pitch = 1.02;
+                utter.onend = () => {
+                    index++;
+                    setTimeout(playLoop, PAUSE_DELAY);
+                }
+                window.speechSynthesis.speak(utter);
+            }
+            playLoop();
+        }
+
+        // 按钮事件绑定
+        document.querySelectorAll(".read-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const text = this.closest(".sentence-wrap").dataset.sentence;
+                speakSingleText(text);
+            })
+        })
+        document.querySelectorAll(".repeat-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const text = this.closest(".sentence-wrap").dataset.sentence;
+                repeatRead(text);
+            })
+        })
+        document.querySelectorAll(".stop-btn").forEach(btn => {
+            btn.addEventListener("click", stopAllSpeech);
+        })
+        document.getElementById("readAll").addEventListener("click", readWholeArticle);
+        document.getElementById("repeatAll").addEventListener("click", repeatWholeArticle);
+        document.getElementById("stopAll").addEventListener("click", stopAllSpeech);
     </script>
 </body>
 </html>
