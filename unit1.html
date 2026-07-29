@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 适配手机缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>九全Unit1 美式跟读短文</title>
     <style>
         body {
@@ -18,19 +19,27 @@
             text-align: center;
             margin-bottom: 30px;
         }
+        .tip {
+            color: #f00;
+            text-align: center;
+            margin: 10px 0;
+        }
         .sentence-wrap {
             margin: 14px 0;
             padding-bottom: 8px;
         }
         button {
-            padding: 5px 14px;
-            margin: 0 8px;
+            padding: 8px 14px;
+            margin: 6px 8px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
             background: #3377dd;
             color: #fff;
-            font-size: 15px;
+            font-size: 16px;
+            /* 手机触屏最低标准尺寸 */
+            min-height: 44px;
+            min-width: 90px;
         }
         button.stop {
             background: #e54343;
@@ -56,8 +65,8 @@
     </style>
 </head>
 <body>
+    <div class="tip">手机端请手动点击按钮解锁音频，刷新页面后重新点击播放</div>
     <h2>A Good Way to Learn English</h2>
-
     <!-- 第一段 -->
     <div class="sentence-wrap" data-sentence="As a Grade Nine student, I used to hide behind my textbook and dare not take part in any conversation in English class.">
         As a Grade Nine student, I used to hide behind my <span class="word-bold">textbook</span> <span class="phonetic">(/ˈtekstbʊk/ n. 教科书；课本)</span> and dare not take part in any <span class="word-bold">conversation</span> <span class="phonetic">(/ˌkɑːnvərˈseɪʃn/ n. 交谈；谈话)</span> in English class.
@@ -79,7 +88,6 @@
         <button class="play-sent">播放单句</button>
         <button class="stop-sent stop">暂停单句</button>
     </div>
-
     <!-- 第二段 -->
     <div class="sentence-wrap" data-sentence="She said we should watch English films and understand the expression on actors’ faces.">
         She said we should watch English films and understand the <span class="word-bold">expression</span> <span class="phonetic">(/ɪkˈspreʃn/ n. 表达（方式）；表情)</span> on actors’ faces.
@@ -106,7 +114,6 @@
         <button class="play-sent">播放单句</button>
         <button class="stop-sent stop">暂停单句</button>
     </div>
-
     <!-- 第三段 -->
     <div class="sentence-wrap" data-sentence="We also study physics and chemistry this term, but I still spare time to memorize words and master sentence pattern.">
         We also study <span class="word-bold">physics</span> <span class="phonetic">(/ˈfɪzɪks/ n. 物理；物理学)</span> and <span class="word-bold">chemistry</span> <span class="phonetic">(/ˈkemɪstri/ n. 化学)</span> this term, but I still spare time to <span class="word-bold">memorize</span> <span class="phonetic">(/ˈmeməraɪz/ v. 记忆；记住)</span> words and master sentence <span class="word-bold">pattern</span> <span class="phonetic">(/ˈpætn/ n. 模式；方式；句型)</span>.
@@ -123,7 +130,6 @@
         <button class="play-sent">播放单句</button>
         <button class="stop-sent stop">暂停单句</button>
     </div>
-
     <!-- 第四段 -->
     <div class="sentence-wrap" data-sentence="Everyone is born with the ability to learn.">
         Everyone is <span class="word-bold">born</span> <span class="phonetic">(/bɔːrn/ v. 出生; adj. 天生的)</span> with the <span class="word-bold">ability</span> <span class="phonetic">(/əˈbɪləti/ n. 能力；才能)</span> to learn.
@@ -155,13 +161,11 @@
         <button class="play-sent">播放单句</button>
         <button class="stop-sent stop">暂停单句</button>
     </div>
-
     <div class="trans-title">全文中文翻译</div>
-    <p>作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。我的发音很差，所以我从不大声朗读，也说不出完整的句子。那时候我缺乏耐心，总觉得英语太难学。幸运的是，我的英语老师对我十分有耐心，还告诉了我语言学习的秘诀。</p>
+    <p>作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。我的发音很差，所以从不大声朗读，也说不出完整的句子。那时候我缺乏耐心，总觉得英语太难学。幸运的是，我的英语老师对我十分有耐心，还告诉了我语言学习的秘诀。</p>
     <p>她说我们可以多看英文电影，看懂演员脸上的表情表达。我很快发现听有趣的素材真的很有帮助。遇到生词时，我会在词典里查阅。除此之外，我会花大量时间学习语法，每天反复练习实用句型。我还会认真记笔记，和我的笔友一起制作单词卡片。</p>
     <p>这学期我们同时学习物理和化学，但我依旧会抽出时间背单词、掌握各类句型。我反复练习难词的正确读法，这大幅提升了我的阅读速度。我经常和学习搭档一起练习英语口语。</p>
     <p>每个人天生都拥有学习的能力。优秀的学习者会自创实用的学习方法，开动大脑积极思考。我们必须重视学习规律，把新单词和有趣的事物关联起来。语言能力不可能一夜速成。我们要定期复习知识，因为真正的知识来源于长久的付出。学习是一场终身的旅程，因此我们要明智地规划自己的学习。</p>
-
     <!-- 全局整篇播放控制按钮 -->
     <div class="global-control">
         <button id="playAll">整篇循环播放</button>
@@ -175,45 +179,77 @@
         let allTextList = [];
         let allPlayIndex = 0;
         let allPlayTimeout = null;
+        let voiceCache = null;
+        let audioUnlocked = false; // 手机音频解锁标记
 
-        // 优先匹配美式新闻主持人音色
-        function getAmericanNewsVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            // 优先筛选美式新闻/标准美音女声
-            let targetVoice = voices.find(v =>
-                v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
-            );
-            if (!targetVoice) {
-                targetVoice = voices.find(v => v.lang === "en-US");
-            }
-            return targetVoice || voices[0];
+        // 异步预加载美式音色，解决手机音色加载延迟
+        function loadVoice() {
+            return new Promise((resolve) => {
+                const getVoices = () => {
+                    const voices = window.speechSynthesis.getVoices();
+                    if (voices.length === 0) {
+                        setTimeout(getVoices, 100);
+                        return;
+                    }
+                    let targetVoice = voices.find(v =>
+                        v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
+                    );
+                    if (!targetVoice) targetVoice = voices.find(v => v.lang === "en-US");
+                    voiceCache = targetVoice || voices[0];
+                    resolve(voiceCache);
+                };
+                getVoices();
+            })
+        }
+
+        // 统一清空所有语音与定时器
+        function stopAllAudio() {
+            window.speechSynthesis.cancel();
+            clearInterval(singleLoopTimer);
+            clearTimeout(allPlayTimeout);
+            singleLoopTimer = null;
+            allPlayTimeout = null;
+            allPlayIndex = 9999;
         }
 
         // 单句循环朗读
-        function readSingleSentence(text) {
+        async function readSingleSentence(text) {
             stopAllAudio();
-            const voice = getAmericanNewsVoice();
+            // 手机首次点击解锁音频权限（系统强制要求用户主动交互）
+            if (!audioUnlocked) {
+                const tempUtter = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(tempUtter);
+                audioUnlocked = true;
+            }
+            // 加载缓存音色
+            if (!voiceCache) await loadVoice();
+            const voice = voiceCache;
             function speakOnce() {
                 utterance = new SpeechSynthesisUtterance(text);
                 utterance.voice = voice;
                 utterance.rate = 0.85;
                 utterance.pitch = 1.02;
+                utterance.volume = 1;
                 window.speechSynthesis.speak(utterance);
             }
             speakOnce();
-            // 循环间隔
             singleLoopTimer = setInterval(speakOnce, text.length * 230);
         }
 
         // 停止单句朗读
         function stopSingleSentence() {
-            window.speechSynthesis.cancel();
-            clearInterval(singleLoopTimer);
+            stopAllAudio();
         }
 
-        // 整篇顺序循环朗读
-        function playAllArticle() {
+        // 整篇循环朗读
+        async function playAllArticle() {
             stopAllAudio();
+            if (!audioUnlocked) {
+                const tempUtter = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(tempUtter);
+                audioUnlocked = true;
+            }
+            if (!voiceCache) await loadVoice();
             allTextList = [];
             document.querySelectorAll(".sentence-wrap").forEach(item => {
                 allTextList.push(item.dataset.sentence);
@@ -225,11 +261,12 @@
         function playNextAll() {
             if (allPlayIndex >= allTextList.length) allPlayIndex = 0;
             const txt = allTextList[allPlayIndex];
-            const voice = getAmericanNewsVoice();
+            const voice = voiceCache;
             utterance = new SpeechSynthesisUtterance(txt);
             utterance.voice = voice;
             utterance.rate = 0.85;
             utterance.pitch = 1.02;
+            utterance.volume = 1;
             utterance.onend = () => {
                 allPlayIndex++;
                 allPlayTimeout = setTimeout(playNextAll, 700);
@@ -237,31 +274,18 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // 停止所有语音
-        function stopAllAudio() {
-            window.speechSynthesis.cancel();
-            clearInterval(singleLoopTimer);
-            clearTimeout(allPlayTimeout);
-            allPlayIndex = 9999;
-        }
-
-        // 页面加载绑定事件
-        window.speechSynthesis.onvoiceschanged = () => {};
-        // 单句播放
+        // 绑定触屏标准事件
         document.querySelectorAll(".play-sent").forEach(btn => {
-            btn.onclick = function () {
+            btn.addEventListener("click", function () {
                 const wrap = this.closest(".sentence-wrap");
                 readSingleSentence(wrap.dataset.sentence);
-            }
+            })
         });
-        // 单句暂停
         document.querySelectorAll(".stop-sent").forEach(btn => {
-            btn.onclick = stopSingleSentence;
+            btn.addEventListener("click", stopSingleSentence);
         });
-        // 整篇播放
-        document.getElementById("playAll").onclick = playAllArticle;
-        // 全部暂停
-        document.getElementById("stopAll").onclick = stopAllAudio;
+        document.getElementById("playAll").addEventListener("click", playAllArticle);
+        document.getElementById("stopAll").addEventListener("click", stopAllAudio);
     </script>
 </body>
 </html>
