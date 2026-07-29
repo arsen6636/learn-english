@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>九全Unit2 美式跟读短文｜Lovely Traditional Festivals</title>
+    <title>九全Unit2 美式跟读短文｜AI跟读版</title>
     <style>
         body {
             font-size: 18px;
@@ -13,34 +13,45 @@
             padding: 0 25px;
             font-family: "Microsoft Yahei", Arial, sans-serif;
         }
-        h2 {
-            color: #111;
+        .warn {
+            color: #ff3333;
             text-align: center;
-            margin-bottom: 30px;
+            font-weight: bold;
+            margin: 12px 0;
         }
-        .tip {
-            color: #f00;
+        .unlock-box {
             text-align: center;
-            margin: 10px 0;
+            margin: 25px 0;
         }
         .sentence-wrap {
-            margin: 14px 0;
-            padding-bottom: 8px;
+            margin: 16px 0;
+            padding-bottom: 10px;
         }
         button {
-            padding: 8px 14px;
-            margin: 6px 8px;
+            padding: 10px 14px;
+            margin: 8px 6px;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 16px;
+            min-height: 48px;
+            min-width: 100px;
+        }
+        .btn-unlock {
+            background: #28a745;
+            color: #fff;
+        }
+        .btn-read {
             background: #3377dd;
             color: #fff;
-            font-size: 16px;
-            min-height: 44px;
-            min-width: 90px;
         }
-        button.stop {
+        .btn-repeat {
+            background: #9933ff;
+            color: #fff;
+        }
+        .btn-stop {
             background: #e54343;
+            color: #fff;
         }
         .word-bold {
             font-weight: 700;
@@ -63,167 +74,222 @@
     </style>
 </head>
 <body>
-    <div class="tip">手机端请手动点击按钮解锁音频，刷新页面后重新点击播放</div>
+    <div class="warn">操作顺序：先点绿色解锁按钮 → 再朗读，推荐使用Google Chrome浏览器</div>
+    <div class="unlock-box">
+        <button class="btn-unlock" id="unlockAudio">🔓 首次点击解锁音频权限</button>
+    </div>
+
     <h2>Lovely Traditional Festivals</h2>
+
     <div class="sentence-wrap" data-sentence="I love the old tradition of enjoying the moon with my relative on Mid-Autumn night.">
         I love the old <span class="word-bold">tradition</span> <span class="phonetic">(/trəˈdɪʃn/ n. 传统；习俗)</span> of enjoying the moon with my <span class="word-bold">relative</span> <span class="phonetic">(/ˈrelətɪv/ n. 亲属；亲戚)</span> on Mid-Autumn night.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="sentence-wrap" data-sentence="I really admire the ancient story of Chang’e.">
         I really <span class="word-bold">admire</span> <span class="phonetic">(/ədˈmaɪər/ v. 欣赏；仰慕)</span> the ancient <span class="word-bold">story</span> <span class="phonetic">(/ˈstɔːri/ n. 故事；传说)</span> of Chang’e.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="sentence-wrap" data-sentence="Bad men wanted to steal Hou Yi’s magic medicine, so Chang’e drank it and flew to the moon alone.">
         Bad men wanted to <span class="word-bold">steal</span> <span class="phonetic">(/stiːl/ v. 偷；窃取)</span> Hou Yi’s magic medicine, so Chang’e drank it and flew to the moon alone.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="sentence-wrap" data-sentence="People lay mooncakes and fruit in yards to miss her.">
         People <span class="word-bold">lay</span> <span class="phonetic">(/leɪ/ v. 放置；安放)</span> mooncakes and fruit in yards to miss her.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="sentence-wrap" data-sentence="The Water Festival is a time for Thai people to celebrate their new year.">
         The Water Festival is a time for Thai people to <span class="word-bold">celebrate</span> <span class="phonetic">(/ˈselɪbreɪt/ v. 庆祝；庆贺)</span> their new year.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="sentence-wrap" data-sentence="Christmas has no scary ghost, but some kids like to trick their parents.">
         Christmas has no scary <span class="word-bold">ghost</span> <span class="phonetic">(/ɡoʊst/ n. 鬼魂；幽灵)</span>, but some kids like to <span class="word-bold">trick</span> <span class="phonetic">(/trɪk/ v. 捉弄；欺骗)</span>.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="sentence-wrap" data-sentence="These festivals bring us much warmth and remind us to value family love.">
         These festivals bring us much <span class="word-bold">warmth</span> <span class="phonetic">(/wɔːrmθ/ n. 温暖；暖和)</span> and remind us to value family love.
-        <button class="play-sent">播放单句</button>
-        <button class="stop-sent stop">暂停单句</button>
+        <button class="btn-read read-btn">朗读本句</button>
+        <button class="btn-repeat repeat-btn">AI跟读重复</button>
+        <button class="btn-stop stop-btn">停止</button>
     </div>
+
     <div class="trans-title">全文中文翻译</div>
     <p>美好的传统节日</p>
     <p>我喜爱中秋夜晚和亲人一同赏月的古老习俗。我十分欣赏嫦娥的古老传说。坏人想要偷走后羿的仙药，于是嫦娥喝下仙药，独自飞向了月宫。</p>
     <p>人们会在院子里摆放月饼和水果来思念她。泼水节是泰国人民庆祝新年的日子。圣诞节并没有可怕的鬼魂，但有些孩子喜欢捉弄他们的父母。</p>
     <p>这些节日带给我们许多温暖，提醒我们珍惜亲情。</p>
-    <!-- 全局整篇播放控制按钮 -->
+
+    <!-- 全局控制按钮 -->
     <div class="global-control">
-        <button id="playAll">整篇循环播放</button>
-        <button id="stopAll" class="stop">全部暂停</button>
+        <button class="btn-read" id="readAll">整篇顺序朗读</button>
+        <button class="btn-repeat" id="repeatAll">整篇循环跟读</button>
+        <button class="btn-stop" id="stopAll">全部暂停</button>
     </div>
 
     <script>
-        // 全局语音变量
-        let utterance = null;
-        let singleLoopTimer = null;
-        let allTextList = [];
-        let allPlayIndex = 0;
-        let allPlayTimeout = null;
-        let voiceCache = null;
+        // 全局变量
         let audioUnlocked = false;
+        let targetVoice = null;
+        const SPEECH_RATE = 0.85;
+        const SPEECH_VOLUME = 1;
+        const PAUSE_DELAY = 1200; // 跟读停顿时间，单位毫秒
 
-        // 异步预加载美式新闻音色
-        function loadVoice() {
-            return new Promise((resolve) => {
-                const getVoices = () => {
-                    const voices = window.speechSynthesis.getVoices();
-                    if(voices.length === 0) {
-                        setTimeout(getVoices,100);
-                        return;
-                    }
-                    let targetVoice = voices.find(v =>
-                        v.lang === "en-US" && (v.name.includes("News") || v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("Karen"))
-                    );
-                    if (!targetVoice) targetVoice = voices.find(v => v.lang === "en-US");
-                    voiceCache = targetVoice || voices[0];
-                    resolve(voiceCache);
-                };
-                getVoices();
-            })
-        }
-
-        // 统一停止所有音频、定时器
-        function stopAllAudio() {
+        // 强制停止所有语音
+        function stopAllSpeech() {
             window.speechSynthesis.cancel();
-            clearInterval(singleLoopTimer);
-            clearTimeout(allPlayTimeout);
-            singleLoopTimer = null;
-            allPlayTimeout = null;
-            allPlayIndex = 9999;
         }
 
-        // 单句循环朗读
-        async function readSingleSentence(text) {
-            stopAllAudio();
-            // 手机解锁音频权限
-            if(!audioUnlocked){
-                const temp = new SpeechSynthesisUtterance("");
-                window.speechSynthesis.speak(temp);
-                audioUnlocked = true;
+        // 加载美式语音音色
+        function loadVoiceResource() {
+            const voices = window.speechSynthesis.getVoices();
+            // 优先美式新闻/标准女声
+            let usVoice = voices.find(v => v.lang === "en-US" && (v.name.includes("Samantha") || v.name.includes("Jenny")));
+            if (!usVoice) usVoice = voices.find(v => v.lang === "en-US");
+            if (!usVoice) usVoice = voices[0];
+            targetVoice = usVoice;
+        }
+        window.speechSynthesis.onvoiceschanged = loadVoiceResource;
+
+        // 解锁音频权限（同步点击触发，绕过浏览器拦截）
+        document.getElementById("unlockAudio").addEventListener("click", function () {
+            if (!window.speechSynthesis) {
+                alert("当前浏览器不支持语音朗读，请更换Google Chrome！");
+                return;
             }
-            if(!voiceCache) await loadVoice();
-            const voice = voiceCache;
-            function speakOnce() {
-                utterance = new SpeechSynthesisUtterance(text);
-                utterance.voice = voice;
-                utterance.rate = 0.85;
-                utterance.pitch = 1.02;
-                utterance.volume = 1;
-                window.speechSynthesis.speak(utterance);
+            stopAllSpeech();
+            // 静音语音解锁通道
+            const unlockUtter = new SpeechSynthesisUtterance("Hello");
+            unlockUtter.volume = 0;
+            window.speechSynthesis.speak(unlockUtter);
+            audioUnlocked = true;
+            alert("音频解锁成功，现在可以正常朗读跟读！");
+        })
+
+        // 单次朗读句子基础函数
+        function speakSingleText(text, callback) {
+            if (!audioUnlocked) {
+                alert("请先点击上方绿色【🔓 首次点击解锁音频权限】按钮！");
+                return;
             }
-            speakOnce();
-            singleLoopTimer = setInterval(speakOnce, text.length * 230);
+            stopAllSpeech();
+            const utter = new SpeechSynthesisUtterance(text);
+            if (targetVoice) utter.voice = targetVoice;
+            utter.rate = SPEECH_RATE;
+            utter.volume = SPEECH_VOLUME;
+            utter.pitch = 1.02;
+            // 朗读完成执行回调（跟读重复）
+            if (typeof callback === "function") utter.onend = callback;
+            window.speechSynthesis.speak(utter);
         }
 
-        // 停止单句朗读
-        function stopSingleSentence() {
-            stopAllAudio();
-        }
-
-        // 整篇顺序循环朗读
-        async function playAllArticle() {
-            stopAllAudio();
-            if(!audioUnlocked){
-                const temp = new SpeechSynthesisUtterance("");
-                window.speechSynthesis.speak(temp);
-                audioUnlocked = true;
-            }
-            if(!voiceCache) await loadVoice();
-            allTextList = [];
-            document.querySelectorAll(".sentence-wrap").forEach(item => {
-                allTextList.push(item.dataset.sentence);
-            });
-            allPlayIndex = 0;
-            playNextAll();
-        }
-
-        function playNextAll() {
-            if (allPlayIndex >= allTextList.length) allPlayIndex = 0;
-            const txt = allTextList[allPlayIndex];
-            const voice = voiceCache;
-            utterance = new SpeechSynthesisUtterance(txt);
-            utterance.voice = voice;
-            utterance.rate = 0.85;
-            utterance.pitch = 1.02;
-            utterance.volume = 1;
-            utterance.onend = () => {
-                allPlayIndex++;
-                allPlayTimeout = setTimeout(playNextAll, 700);
-            };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // 绑定触屏标准事件
-        document.querySelectorAll(".play-sent").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const wrap = this.closest(".sentence-wrap");
-                readSingleSentence(wrap.dataset.sentence);
+        // 单句AI跟读重复：读一遍→停顿→再读一遍
+        function repeatRead(text) {
+            speakSingleText(text, () => {
+                setTimeout(() => {
+                    speakSingleText(text);
+                }, PAUSE_DELAY);
             })
-        });
-        document.querySelectorAll(".stop-sent").forEach(btn => {
-            btn.addEventListener("click", stopSingleSentence);
-        });
-        document.getElementById("playAll").addEventListener("click", playAllArticle);
-        document.getElementById("stopAll").addEventListener("click", stopAllAudio);
+        }
+
+        // 整篇顺序朗读
+        function readWholeArticle() {
+            if (!audioUnlocked) {
+                alert("请先解锁音频！");
+                return;
+            }
+            stopAllSpeech();
+            const sentenceList = [];
+            document.querySelectorAll(".sentence-wrap").forEach(item => {
+                sentenceList.push(item.dataset.sentence);
+            })
+            let index = 0;
+            function playNext() {
+                if (index >= sentenceList.length) return;
+                const txt = sentenceList[index];
+                const utter = new SpeechSynthesisUtterance(txt);
+                if (targetVoice) utter.voice = targetVoice;
+                utter.rate = SPEECH_RATE;
+                utter.volume = SPEECH_VOLUME;
+                utter.pitch = 1.02;
+                utter.onend = () => {
+                    index++;
+                    setTimeout(playNext, PAUSE_DELAY);
+                }
+                window.speechSynthesis.speak(utter);
+            }
+            playNext();
+        }
+
+        // 整篇循环跟读（无限循环整篇）
+        function repeatWholeArticle() {
+            if (!audioUnlocked) {
+                alert("请先解锁音频！");
+                return;
+            }
+            stopAllSpeech();
+            const sentenceList = [];
+            document.querySelectorAll(".sentence-wrap").forEach(item => {
+                sentenceList.push(item.dataset.sentence);
+            })
+            let index = 0;
+            function playLoop() {
+                if (index >= sentenceList.length) index = 0;
+                const txt = sentenceList[index];
+                const utter = new SpeechSynthesisUtterance(txt);
+                if (targetVoice) utter.voice = targetVoice;
+                utter.rate = SPEECH_RATE;
+                utter.volume = SPEECH_VOLUME;
+                utter.pitch = 1.02;
+                utter.onend = () => {
+                    index++;
+                    setTimeout(playLoop, PAUSE_DELAY);
+                }
+                window.speechSynthesis.speak(utter);
+            }
+            playLoop();
+        }
+
+        // 绑定单句朗读按钮
+        document.querySelectorAll(".read-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const text = this.closest(".sentence-wrap").dataset.sentence;
+                speakSingleText(text);
+            })
+        })
+        // 绑定AI跟读重复按钮
+        document.querySelectorAll(".repeat-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const text = this.closest(".sentence-wrap").dataset.sentence;
+                repeatRead(text);
+            })
+        })
+        // 全部停止按钮
+        document.querySelectorAll(".stop-btn").forEach(btn => {
+            btn.addEventListener("click", stopAllSpeech);
+        })
+        // 全局整篇朗读
+        document.getElementById("readAll").addEventListener("click", readWholeArticle);
+        // 全局整篇循环跟读
+        document.getElementById("repeatAll").addEventListener("click", repeatWholeArticle);
+        // 全局停止
+        document.getElementById("stopAll").addEventListener("click", stopAllSpeech);
     </script>
 </body>
 </html>
