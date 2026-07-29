@@ -1,360 +1,735 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>九全Unit1 标准美式AI跟读修复版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>A Good Way to Learn English</title>
     <style>
+        /* ===== 全局重置 & 校园清新风格 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-size: 18px;
-            line-height: 1.8;
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 25px;
-            font-family: "Microsoft Yahei", Arial, sans-serif;
+            font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7f0;
+            color: #2c4a2e;
+            padding: 20px 16px 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
         }
-        .warn {
-            color: #ff3333;
+
+        .app {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(60, 100, 70, 0.10);
+            padding: 28px 22px 36px;
+            transition: all 0.2s;
+        }
+
+        .header {
             text-align: center;
-            font-weight: bold;
-            margin: 12px 0;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 2px dashed #d4e8d4;
         }
-        .unlock-box {
-            text-align: center;
-            margin: 25px 0;
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #2a5e3a;
+            background: linear-gradient(145deg, #2a5e3a, #3d7a4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .sentence-wrap {
-            margin: 16px 0;
-            padding-bottom: 10px;
+        .header .sub {
+            font-size: 14px;
+            color: #6b8f72;
+            margin-top: 6px;
+            letter-spacing: 2px;
         }
-        button {
-            padding: 10px 14px;
-            margin: 8px 6px;
-            cursor: pointer;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            min-height: 48px;
-            min-width: 100px;
+
+        /* 句子卡片 */
+        .sentence {
+            background: #fafffa;
+            border-radius: 20px;
+            padding: 18px 18px 14px;
+            margin-bottom: 18px;
+            border: 1px solid #e4f0e4;
+            transition: background 0.25s, border-color 0.25s, box-shadow 0.3s;
+            box-shadow: 0 2px 6px rgba(60, 100, 70, 0.04);
         }
-        .btn-unlock {
-            background: #28a745;
-            color: #fff;
+        .sentence.active {
+            background: #edf7ed;
+            border-color: #7bb57b;
+            box-shadow: 0 4px 16px rgba(70, 140, 80, 0.15);
         }
-        .btn-read {
-            background: #3377dd;
-            color: #fff;
+
+        .en {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #1d3a22;
+            font-weight: 450;
+            word-break: break-word;
         }
-        .btn-repeat {
-            background: #9933ff;
-            color: #fff;
-        }
-        .btn-stop {
-            background: #e54343;
-            color: #fff;
-        }
-        .word-bold {
+        .word {
             font-weight: 700;
-            font-size: 19px;
+            color: #b4433c;
         }
-        .phonetic {
-            color: red;
+        .note {
+            font-weight: 400;
+            color: #b4433c;
+            font-size: 0.85em;
+            background: #fef0ee;
+            padding: 0 4px;
+            border-radius: 4px;
+            white-space: nowrap;
         }
-        .trans-title {
-            margin-top: 50px;
-            font-size: 21px;
-            font-weight: bold;
+
+        .zh {
+            font-size: 15px;
+            color: #4e6e54;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dotted #dce8dc;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
         }
-        .global-control {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #999;
-            text-align: center;
+
+        /* 控制按钮 */
+        .sentence-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            align-items: center;
         }
+        .sentence-controls button {
+            background: #eaf3ea;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2a5e3a;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .sentence-controls button:active {
+            transform: scale(0.94);
+        }
+        .sentence-controls .play-btn {
+            background: #cbe3cb;
+            color: #1d4a2a;
+        }
+        .sentence-controls .play-btn:active {
+            background: #b3d4b3;
+        }
+        .sentence-controls .pause-btn {
+            background: #f0e8d8;
+            color: #7a6a4a;
+        }
+        .sentence-controls .pause-btn:active {
+            background: #e6dcca;
+        }
+        .sentence-controls .status-badge {
+            font-size: 13px;
+            color: #6f8f72;
+            margin-left: 4px;
+            font-weight: 400;
+        }
+
+        /* 全局控制 */
+        .global-controls {
+            margin-top: 28px;
+            padding: 18px 16px 16px;
+            background: #eef6ee;
+            border-radius: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 14px 20px;
+            border: 1px solid #d4e8d4;
+        }
+        .global-controls .ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .global-controls button {
+            background: #ffffff;
+            border: 1px solid #bdd6bd;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2a5e3a;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            touch-action: manipulation;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+        .global-controls button:active {
+            transform: scale(0.94);
+        }
+        .global-controls .btn-loop {
+            background: #d4e8d4;
+            border-color: #8bb88b;
+        }
+        .global-controls .btn-loop.active-loop {
+            background: #7bb57b;
+            color: #fff;
+            border-color: #5a9a5a;
+        }
+        .global-controls .btn-stop {
+            background: #f5e8e8;
+            border-color: #dbb8b8;
+            color: #8a4a4a;
+        }
+        .global-controls .loop-info {
+            font-size: 14px;
+            color: #3d6b44;
+            background: #ffffffcc;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-weight: 500;
+            border: 1px solid #d4e8d4;
+        }
+        .global-status {
+            font-size: 14px;
+            color: #4e6e54;
+        }
+
+        /* 完整翻译 */
+        .full-translation {
+            margin-top: 32px;
+            padding: 22px 20px 18px;
+            background: #f7fbf7;
+            border-radius: 24px;
+            border: 1px solid #dfecdf;
+        }
+        .full-translation .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a7a52;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .full-translation .label::before {
+            content: '📖';
+            font-size: 18px;
+        }
+        .full-translation .zh-full {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #2a4a30;
+            letter-spacing: 0.5px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .app { padding: 16px 12px 24px; }
+            .header h1 { font-size: 21px; }
+            .en { font-size: 15.5px; }
+            .note { font-size: 0.8em; white-space: normal; }
+            .zh { font-size: 14px; }
+            .sentence { padding: 14px 14px 12px; }
+            .sentence-controls button { padding: 7px 14px; font-size: 13px; }
+            .global-controls { padding: 14px 12px; gap: 10px; }
+            .global-controls button { padding: 8px 16px; font-size: 14px; }
+            .full-translation { padding: 16px 14px; }
+            .full-translation .zh-full { font-size: 14.5px; }
+        }
+        @media (min-width: 768px) {
+            .en { font-size: 19px; }
+            .sentence { padding: 22px 26px 16px; }
+        }
+        button { -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 6px; background: #e8f0e8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #b0cbb0; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="warn">操作顺序：先点绿色解锁按钮 → 再朗读，推荐Google Chrome，语音强制标准美式口音</div>
-    <div class="unlock-box">
-        <button class="btn-unlock" id="unlockAudio">🔓 首次点击解锁音频权限</button>
+
+<div class="app" id="app">
+    <div class="header">
+        <h1>📘 A Good Way to Learn English</h1>
+        <div class="sub">✦ 九年级 · Unit 1 课标单词全覆盖 ✦</div>
     </div>
 
-    <h2>A Good Way to Learn English</h2>
-    <!-- 第一段 -->
-    <div class="sentence-wrap" data-sentence="As a Grade Nine student, I used to hide behind my textbook and dare not take part in any conversation in English class.">
-        As a Grade Nine student, I used to hide behind my <span class="word-bold">textbook</span> <span class="phonetic">(/ˈtekstbʊk/ n. 教科书；课本)</span> and dare not take part in any <span class="word-bold">conversation</span> <span class="phonetic">(/ˌkɑːnvərˈseɪʃn/ n. 交谈；谈话)</span> in English class.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="My pronunciation was terrible, so I never read aloud or spoke full sentence.">
-        My <span class="word-bold">pronunciation</span> <span class="phonetic">(/prəˌnʌnsiˈeɪʃn/ n. 发音；读音)</span> was terrible, so I never read <span class="word-bold">aloud</span> <span class="phonetic">(/əˈlaʊd/ adv. 大声地；出声地)</span> or spoke full <span class="word-bold">sentence</span> <span class="phonetic">(/ˈsentəns/ n. 句子)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="At that time, I lacked patience and thought learning English was too hard.">
-        At that time, I lacked patience and thought learning English was too hard.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="Luckily, my English teacher was very patient with me and told me the secret of language learning.">
-        Luckily, my English teacher was very <span class="word-bold">patient</span> <span class="phonetic">(/ˈpeɪʃnt/ adj. 有耐心的; n. 病人)</span> with me and told me the <span class="word-bold">secret</span> <span class="phonetic">(/ˈsiːkrət/ n. 秘密；秘诀; adj. 秘密的)</span> of language learning.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <!-- 第二段 -->
-    <div class="sentence-wrap" data-sentence="She said we should watch English films and understand the expression on actors’ faces.">
-        She said we should watch English films and understand the <span class="word-bold">expression</span> <span class="phonetic">(/ɪkˈspreʃn/ n. 表达（方式）；表情)</span> on actors’ faces.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="I soon discovered that listening to interesting materials really helped.">
-        I soon <span class="word-bold">discover</span> <span class="phonetic">(/dɪˈskʌvər/ v. 发现；发觉)</span> that listening to interesting materials really helped.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="When I met new words, I would look them up in the dictionary.">
-        When I met new words, I would look them up in the dictionary.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="Besides, I spent much time learning grammar and repeat useful sentences every day.">
-        Besides, I spent much time learning <span class="word-bold">grammar</span> <span class="phonetic">(/ˈɡræmər/ n. 语法)</span> and <span class="word-bold">repeat</span> <span class="phonetic">(/rɪˈpiːt/ v. 重复；重做)</span> useful sentences every day.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="I also took clear note and made word cards with my pen pal.">
-        I also took clear <span class="word-bold">note</span> <span class="phonetic">(/noʊt/ n. 笔记；记录; v. 注意；记录)</span> and made word cards with my pen <span class="word-bold">pal</span> <span class="phonetic">(/pæl/ n. 朋友；伙伴)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <!-- 第三段 -->
-    <div class="sentence-wrap" data-sentence="We also study physics and chemistry this term, but I still spare time to memorize words and master sentence pattern.">
-        We also study <span class="word-bold">physics</span> <span class="phonetic">(/ˈfɪzɪks/ n. 物理；物理学)</span> and <span class="word-bold">chemistry</span> <span class="phonetic">(/ˈkemɪstri/ n. 化学)</span> this term, but I still spare time to <span class="word-bold">memorize</span> <span class="phonetic">(/ˈmeməraɪz/ v. 记忆；记住)</span> words and master sentence <span class="word-bold">pattern</span> <span class="phonetic">(/ˈpætn/ n. 模式；方式；句型)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="I practice how to pronounce difficult words correctly, which greatly increase my reading speed.">
-        I practice how to <span class="word-bold">pronounce</span> <span class="phonetic">(/prəˈnaʊns/ v. 发音)</span> difficult words correctly, which greatly <span class="word-bold">increase</span> <span class="phonetic">(/ɪnˈkriːs/ v. 增加；增长)</span> my reading <span class="word-bold">speed</span> <span class="phonetic">(/spiːd/ n. 速度; v. 加速)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="I often practice oral English with my study partner.">
-        I often practice oral English with my study <span class="word-bold">partner</span> <span class="phonetic">(/ˈpɑːrtnər/ n. 搭档；同伴)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <!-- 第四段 -->
-    <div class="sentence-wrap" data-sentence="Everyone is born with the ability to learn.">
-        Everyone is <span class="word-bold">born</span> <span class="phonetic">(/bɔːrn/ v. 出生; adj. 天生的)</span> with the <span class="word-bold">ability</span> <span class="phonetic">(/əˈbɪləti/ n. 能力；才能)</span> to learn.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="Good learners can create useful learning methods and use their brain to think active.">
-        Good learners can <span class="word-bold">create</span> <span class="phonetic">(/kriˈeɪt/ v. 创造；创建)</span> useful learning methods and use their <span class="word-bold">brain</span> <span class="phonetic">(/breɪn/ n. 大脑)</span> to think <span class="word-bold">active</span> <span class="phonetic">(/ˈæktɪv/ adj. 活跃的；积极的)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="We must pay attention to learning rules and connect new words with interesting things.">
-        We must pay <span class="word-bold">attention</span> <span class="phonetic">(/əˈtenʃn/ n. 注意；关注)</span> to learning rules and <span class="word-bold">connect</span> <span class="phonetic">(/kəˈnekt/ v.（使）连接；联系)</span> new words with interesting things.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="Language progress cannot come overnight.">
-        Language progress cannot come <span class="word-bold">overnight</span> <span class="phonetic">(/ˌoʊvərˈnaɪt/ adv. 一夜之间；在夜间)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="We need to review knowledge regularly, for true knowledge comes from long-term efforts.">
-        We need to <span class="word-bold">review</span> <span class="phonetic">(/rɪˈvjuː/ v.&n. 回顾；复习)</span> knowledge regularly, for true <span class="word-bold">knowledge</span> <span class="phonetic">(/ˈnɑːlɪdʒ/ n. 知识；学问)</span> comes from long-term efforts.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
-    </div>
-    <div class="sentence-wrap" data-sentence="Learning is a lifelong journey, so we should plan our study wisely.">
-        Learning is a <span class="word-bold">lifelong</span> <span class="phonetic">(/ˈlaɪflɔːŋ/ adj. 终身的；毕生的)</span> journey, so we should plan our study <span class="word-bold">wisely</span> <span class="phonetic">(/ˈwaɪzli/ adv. 明智地；聪明地)</span>.
-        <button class="btn-read read-btn">朗读本句</button>
-        <button class="btn-repeat repeat-btn">AI跟读重复</button>
-        <button class="btn-stop stop-btn">停止</button>
+    <div id="sentenceContainer"></div>
+
+    <div class="global-controls" id="globalControls">
+        <div class="ctrl-group">
+            <button class="btn-loop" id="btnLoop">🔁 循环播放</button>
+            <span class="loop-info" id="loopInfo">0 / 10</span>
+            <button class="btn-stop" id="btnStop">⏹ 停止全部</button>
+        </div>
+        <div class="ctrl-group">
+            <span class="global-status" id="globalStatus">● 就绪</span>
+        </div>
     </div>
 
-    <div class="trans-title">全文中文翻译</div>
-    <p>作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。我的发音很差，所以我从不大声朗读，也说不出完整的句子。那时候我缺乏耐心，觉得英语太难学。幸运的是，我的英语老师对我很有耐心，告诉了我学习语言的秘诀。</p>
-    <p>她说我们可以多看英文电影，看懂演员脸上的情绪表达。我很快发现听趣味材料真的很有用。遇到生词时，我会查词典。除此之外，我每天花大量时间学习语法、重复实用句型。我还认真记笔记，和笔友一起制作单词卡片。</p>
-    <p>这学期我们同时学习物理和化学，但我仍然抽出时间背诵单词、掌握句型。我练习准确读出难词，这大大提升了我的阅读速度。我经常和学习搭档练习口语。</p>
-    <p>每个人天生都具备学习的能力。优秀的学习者能创造实用的学习方法，勤于动脑、积极思考。我们必须重视学习规律，把新词和有趣的事物联系起来。语言的进步不可能一蹴而就。我们需要定期复习知识，真正的知识来自长期付出。学习是一场终身旅程，我们应当明智规划自己的学习。</p>
-
-    <!-- 全局控制按钮 -->
-    <div class="global-control">
-        <button class="btn-read" id="readAll">整篇顺序朗读</button>
-        <button class="btn-repeat" id="repeatAll">整篇循环跟读</button>
-        <button class="btn-stop" id="stopAll">全部暂停</button>
+    <div class="full-translation">
+        <div class="label">完整中文翻译</div>
+        <div class="zh-full" id="fullTranslation">
+            作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。我的发音很差，所以我从不大声朗读，也说不出完整的句子。那时候我缺乏耐心，总觉得英语太难学。幸运的是，我的英语老师对我十分有耐心，还告诉了我语言学习的秘诀。<br><br>
+            她说我们可以多看英文电影，看懂演员脸上的表情表达。我很快发现听有趣的素材真的很有帮助。遇到生词时，我会在词典里查阅。除此之外，我会花大量时间学习语法，每天反复练习实用句型。我还会认真记笔记，和我的笔友一起制作单词卡片。<br><br>
+            这学期我们同时学习物理和化学，但我依旧会抽出时间背单词、掌握各类句型。我反复练习难词的正确读法，这大幅提升了我的阅读速度。我经常和学习搭档一起练习英语口语。<br><br>
+            每个人天生都拥有学习的能力。优秀的学习者会自创实用的学习方法，开动大脑积极思考。我们必须重视学习规律，把新单词和有趣的事物关联起来。语言能力不可能一夜速成。我们要定期复习知识，因为真正的知识来源于长久的付出。学习是一场终身的旅程，因此我们要明智地规划自己的学习。
+        </div>
     </div>
+</div>
 
-    <script>
-        // 全局变量
-        let audioUnlocked = false;
-        let targetVoice = null;
-        const SPEECH_RATE = 0.85;
-        const SPEECH_VOLUME = 1;
-        const PAUSE_DELAY = 1200;
-
-        // 强制停止所有语音
-        function stopAllSpeech() {
-            window.speechSynthesis.cancel();
+<script>
+    // ================================================================
+    //  1. 句子数据（共18句，含所有Unit 1课标单词注释）
+    // ================================================================
+    const sentencesData = [
+        {
+            enHTML: `As a Grade Nine student, I used to hide behind my <span class="word">textbook</span><span class="note"> (/ˈtekstbʊk/ n. 教科书；课本)</span> and dare not take part in any <span class="word">conversation</span><span class="note"> (/ˌkɒnvəˈseɪʃn/ n. 交谈；谈话)</span> in English class.`,
+            enText: "As a Grade Nine student, I used to hide behind my textbook and dare not take part in any conversation in English class.",
+            zh: "作为一名九年级学生，我以前总躲在课本后面，不敢参与课堂上任何英语对话。"
+        },
+        {
+            enHTML: `My <span class="word">pronunciation</span><span class="note"> (/prəˌnʌnsiˈeɪʃn/ n. 发音；读音)</span> was terrible, so I never read <span class="word">aloud</span><span class="note"> (/əˈlaʊd/ adv. 大声地；出声地)</span> or spoke full <span class="word">sentence</span><span class="note"> (/ˈsentəns/ n. 句子)</span>.`,
+            enText: "My pronunciation was terrible, so I never read aloud or spoke full sentence.",
+            zh: "我的发音很差，所以我从不大声朗读，也说不出完整的句子。"
+        },
+        {
+            enHTML: `At that time, I lacked patience and thought learning English was too hard.`,
+            enText: "At that time, I lacked patience and thought learning English was too hard.",
+            zh: "那时候我缺乏耐心，总觉得英语太难学。"
+        },
+        {
+            enHTML: `Luckily, my English teacher was very <span class="word">patient</span><span class="note"> (/ˈpeɪʃnt/ adj. 有耐心的；n. 病人)</span> with me and told me the <span class="word">secret</span><span class="note"> (/ˈsiːkrət/ n. 秘密；秘诀；adj. 秘密的)</span> of language learning.`,
+            enText: "Luckily, my English teacher was very patient with me and told me the secret of language learning.",
+            zh: "幸运的是，我的英语老师对我十分有耐心，还告诉了我语言学习的秘诀。"
+        },
+        {
+            enHTML: `She said we should watch English films and understand the <span class="word">expression</span><span class="note"> (/ɪkˈspreʃn/ n. 表达（方式）；表情)</span> on actors' faces.`,
+            enText: "She said we should watch English films and understand the expression on actors' faces.",
+            zh: "她说我们可以多看英文电影，看懂演员脸上的表情表达。"
+        },
+        {
+            enHTML: `I soon <span class="word">discover</span><span class="note"> (/dɪˈskʌvə(r)/ v. 发现；发觉)</span> that listening to interesting materials really helped.`,
+            enText: "I soon discover that listening to interesting materials really helped.",
+            zh: "我很快发现听有趣的素材真的很有帮助。"
+        },
+        {
+            enHTML: `When I met new words, I would <span class="word">look up</span><span class="note"> (短语；查阅；抬头看)</span> them in the dictionary.`,
+            enText: "When I met new words, I would look up them in the dictionary.",
+            zh: "遇到生词时，我会在词典里查阅。"
+        },
+        {
+            enHTML: `Besides, I spent much time learning <span class="word">grammar</span><span class="note"> (/ˈɡræmə(r)/ n. 语法)</span> and <span class="word">repeat</span><span class="note"> (/rɪˈpiːt/ v. 重复；重做)</span> useful sentences every day.`,
+            enText: "Besides, I spent much time learning grammar and repeat useful sentences every day.",
+            zh: "除此之外，我会花大量时间学习语法，每天反复练习实用句型。"
+        },
+        {
+            enHTML: `I also took clear <span class="word">note</span><span class="note"> (/nəʊt/ n. 笔记；记录；v. 注意；记录)</span> and made word cards with my pen <span class="word">pal</span><span class="note"> (/pæl/ n. 朋友；伙伴)</span>.`,
+            enText: "I also took clear note and made word cards with my pen pal.",
+            zh: "我还会认真记笔记，和我的笔友一起制作单词卡片。"
+        },
+        {
+            enHTML: `We also study <span class="word">physics</span><span class="note"> (/ˈfɪzɪks/ n. 物理；物理学)</span> and <span class="word">chemistry</span><span class="note"> (/ˈkemɪstri/ n. 化学)</span> this term, but I still spare time to <span class="word">memorize</span><span class="note"> (/ˈmeməraɪz/ v. 记忆；记住)</span> words and master sentence <span class="word">pattern</span><span class="note"> (/ˈpætn/ n. 模式；方式；句型)</span>.`,
+            enText: "We also study physics and chemistry this term, but I still spare time to memorize words and master sentence pattern.",
+            zh: "这学期我们同时学习物理和化学，但我依旧会抽出时间背单词、掌握各类句型。"
+        },
+        {
+            enHTML: `I practice how to <span class="word">pronounce</span><span class="note"> (/prəˈnaʊns/ v. 发音)</span> difficult words correctly, which greatly <span class="word">increase</span><span class="note"> (/ɪnˈkriːs/ v. 增加；增长)</span> my reading <span class="word">speed</span><span class="note"> (/spiːd/ n. 速度；v. 加速)</span>.`,
+            enText: "I practice how to pronounce difficult words correctly, which greatly increase my reading speed.",
+            zh: "我反复练习难词的正确读法，这大幅提升了我的阅读速度。"
+        },
+        {
+            enHTML: `I often practice oral English with my study <span class="word">partner</span><span class="note"> (/ˈpɑːtnə(r)/ n. 搭档；同伴)</span>.`,
+            enText: "I often practice oral English with my study partner.",
+            zh: "我经常和学习搭档一起练习英语口语。"
+        },
+        {
+            enHTML: `Everyone is <span class="word">born</span><span class="note"> (/bɔːn/ v. 出生；adj. 天生的)</span> with the <span class="word">ability</span><span class="note"> (/əˈbɪləti/ n. 能力；才能)</span> to learn.`,
+            enText: "Everyone is born with the ability to learn.",
+            zh: "每个人天生都拥有学习的能力。"
+        },
+        {
+            enHTML: `Good learners can <span class="word">create</span><span class="note"> (/kriˈeɪt/ v. 创造；创建)</span> useful learning methods and use their <span class="word">brain</span><span class="note"> (/breɪn/ n. 大脑)</span> to think <span class="word">active</span><span class="note"> (/ˈæktɪv/ adj. 活跃的；积极的)</span>.`,
+            enText: "Good learners can create useful learning methods and use their brain to think active.",
+            zh: "优秀的学习者会自创实用的学习方法，开动大脑积极思考。"
+        },
+        {
+            enHTML: `We must pay <span class="word">attention</span><span class="note"> (/əˈtenʃn/ n. 注意；关注)</span> to learning rules and <span class="word">connect</span><span class="note"> (/kəˈnekt/ v.（使）连接；联系)</span> new words with interesting things.`,
+            enText: "We must pay attention to learning rules and connect new words with interesting things.",
+            zh: "我们必须重视学习规律，把新单词和有趣的事物关联起来。"
+        },
+        {
+            enHTML: `Language progress cannot come <span class="word">overnight</span><span class="note"> (/ˌəʊvəˈnaɪt/ adv. 一夜之间；在夜间)</span>.`,
+            enText: "Language progress cannot come overnight.",
+            zh: "语言能力不可能一夜速成。"
+        },
+        {
+            enHTML: `We need to <span class="word">review</span><span class="note"> (/rɪˈvjuː/ v.&n. 回顾；复习)</span> knowledge regularly, for true <span class="word">knowledge</span><span class="note"> (/ˈnɒlɪdʒ/ n. 知识；学问)</span> comes from long-term efforts.`,
+            enText: "We need to review knowledge regularly, for true knowledge comes from long-term efforts.",
+            zh: "我们要定期复习知识，因为真正的知识来源于长久的付出。"
+        },
+        {
+            enHTML: `Learning is a <span class="word">lifelong</span><span class="note"> (/ˈlaɪflɒŋ/ adj. 终身的；毕生的)</span> journey, so we should plan our study <span class="word">wisely</span><span class="note"> (/ˈwaɪzli/ adv. 明智地；聪明地)</span>.`,
+            enText: "Learning is a lifelong journey, so we should plan our study wisely.",
+            zh: "学习是一场终身的旅程，因此我们要明智地规划自己的学习。"
         }
+    ];
 
-        // 【核心：严格匹配标准美式 en-US 音色】
-        function loadVoiceResource() {
+    // ================================================================
+    //  2. 状态管理
+    // ================================================================
+    const state = {
+        isPlaying: new Array(sentencesData.length).fill(false),
+        isPaused: new Array(sentencesData.length).fill(false),
+        utterances: new Array(sentencesData.length).fill(null),
+        currentIndex: -1,
+        loopCount: 0,
+        maxLoop: 10,
+        isLooping: false,
+        voice: null,
+        currentUtterance: null,
+        currentIdx: -1,
+    };
+
+    const container = document.getElementById('sentenceContainer');
+    const btnLoop = document.getElementById('btnLoop');
+    const btnStop = document.getElementById('btnStop');
+    const loopInfo = document.getElementById('loopInfo');
+    const globalStatus = document.getElementById('globalStatus');
+
+    // ================================================================
+    //  3. 渲染句子
+    // ================================================================
+    function renderSentences() {
+        let html = '';
+        sentencesData.forEach((item, idx) => {
+            html += `
+                <div class="sentence" data-index="${idx}" id="sentence-${idx}">
+                    <div class="en">${item.enHTML}</div>
+                    <div class="zh">${item.zh}</div>
+                    <div class="sentence-controls">
+                        <button class="play-btn" data-index="${idx}">▶ 播放</button>
+                        <button class="pause-btn" data-index="${idx}">⏸ 暂停</button>
+                        <span class="status-badge" id="status-${idx}">● 待播</span>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+
+        // 绑定事件
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.index, 10);
+                playSentence(idx);
+            });
+        });
+        document.querySelectorAll('.pause-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.index, 10);
+                pauseSentence(idx);
+            });
+        });
+    }
+
+    // ================================================================
+    //  4. 语音合成
+    // ================================================================
+    function getVoice() {
+        return new Promise((resolve) => {
             const voices = window.speechSynthesis.getVoices();
-            // 优先系统标准美式女声（Samantha / Jenny 主流美音）
-            let standardUsVoice = voices.find(v =>
-                v.lang === "en-US" && (v.name.includes("Samantha") || v.name.includes("Jenny") || v.name.includes("US"))
-            );
-            // 无新闻人声，降级任意标准美音
-            if (!standardUsVoice) standardUsVoice = voices.find(v => v.lang === "en-US");
-            // 完全无美音，弹窗提醒用户安装英文语音包
-            if (!standardUsVoice) {
-                alert("未检测到标准美式英语语音，请前往手机设置-无障碍-文字转语音，下载美式英文语音包！");
-            }
-            targetVoice = standardUsVoice;
-        }
-        window.speechSynthesis.onvoiceschanged = loadVoiceResource;
-
-        // 解锁音频权限（同步点击，绕过浏览器拦截）
-        document.getElementById("unlockAudio").addEventListener("click", function () {
-            if (!window.speechSynthesis) {
-                alert("当前浏览器不支持语音朗读，请使用Google Chrome！");
-                return;
-            }
-            stopAllSpeech();
-            const unlockUtter = new SpeechSynthesisUtterance("Hello");
-            unlockUtter.volume = 0;
-            window.speechSynthesis.speak(unlockUtter);
-            audioUnlocked = true;
-            alert("音频解锁成功，将使用标准美式口音朗读！");
-        })
-
-        // 单次朗读（强制绑定美音音色）
-        function speakSingleText(text, callback) {
-            if (!audioUnlocked) {
-                alert("请先点击上方绿色解锁按钮！");
-                return;
-            }
-            if (!targetVoice) {
-                alert("缺少标准美式语音包，朗读会使用系统默认口音！");
-            }
-            stopAllSpeech();
-            const utter = new SpeechSynthesisUtterance(text);
-            if (targetVoice) utter.voice = targetVoice;
-            utter.rate = SPEECH_RATE;
-            utter.volume = SPEECH_VOLUME;
-            utter.pitch = 1.02;
-            if (typeof callback === "function") utter.onend = callback;
-            window.speechSynthesis.speak(utter);
-        }
-
-        // 单句AI跟读：读一遍→停顿→再读一遍
-        function repeatRead(text) {
-            speakSingleText(text, () => {
+            if (voices.length > 0) {
+                let selected = voices.find(v =>
+                    v.lang.startsWith('en-US') &&
+                    (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha'))
+                );
+                if (!selected) selected = voices.find(v => v.lang.startsWith('en-US'));
+                if (!selected) selected = voices.find(v => v.lang.startsWith('en'));
+                resolve(selected || voices[0] || null);
+            } else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    const vs = window.speechSynthesis.getVoices();
+                    let selected = vs.find(v =>
+                        v.lang.startsWith('en-US') &&
+                        (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha'))
+                    );
+                    if (!selected) selected = vs.find(v => v.lang.startsWith('en-US'));
+                    if (!selected) selected = vs.find(v => v.lang.startsWith('en'));
+                    resolve(selected || vs[0] || null);
+                };
                 setTimeout(() => {
-                    speakSingleText(text);
-                }, PAUSE_DELAY);
-            })
+                    const vs = window.speechSynthesis.getVoices();
+                    resolve(vs[0] || null);
+                }, 1000);
+            }
+        });
+    }
+
+    getVoice().then(v => { state.voice = v; });
+
+    // ================================================================
+    //  5. 播放 / 暂停 单句
+    // ================================================================
+    function playSentence(idx) {
+        if (idx < 0 || idx >= sentencesData.length) return;
+
+        // 如果正在循环，停止循环
+        if (state.isLooping) {
+            stopLoop();
         }
 
-        // 整篇顺序朗读
-        function readWholeArticle() {
-            if (!audioUnlocked) {
-                alert("请先解锁音频！");
-                return;
-            }
-            stopAllSpeech();
-            const sentenceList = [];
-            document.querySelectorAll(".sentence-wrap").forEach(item => {
-                sentenceList.push(item.dataset.sentence);
-            })
-            let index = 0;
-            function playNext() {
-                if (index >= sentenceList.length) return;
-                const txt = sentenceList[index];
-                const utter = new SpeechSynthesisUtterance(txt);
-                if (targetVoice) utter.voice = targetVoice;
-                utter.rate = SPEECH_RATE;
-                utter.volume = SPEECH_VOLUME;
-                utter.pitch = 1.02;
-                utter.onend = () => {
-                    index++;
-                    setTimeout(playNext, PAUSE_DELAY);
+        // 停止当前任何正在播放的句子
+        if (state.currentUtterance && state.currentIdx !== undefined) {
+            window.speechSynthesis.cancel();
+            state.isPlaying[state.currentIdx] = false;
+            state.isPaused[state.currentIdx] = false;
+            updateSentenceStatus(state.currentIdx);
+            clearHighlight(state.currentIdx);
+            state.currentUtterance = null;
+            state.currentIdx = -1;
+        }
+
+        const text = sentencesData[idx].enText;
+        const el = document.getElementById(`sentence-${idx}`);
+
+        clearHighlightAll();
+        el.classList.add('active');
+        state.currentIndex = idx;
+
+        state.isPlaying[idx] = true;
+        state.isPaused[idx] = false;
+        updateSentenceStatus(idx);
+        updateGlobalStatus(`朗读中 #${idx+1}`);
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.92;
+        utterance.pitch = 1.05;
+        utterance.volume = 1;
+        if (state.voice) utterance.voice = state.voice;
+        else {
+            const vs = window.speechSynthesis.getVoices();
+            const v = vs.find(v => v.lang.startsWith('en-US'));
+            if (v) utterance.voice = v;
+        }
+
+        state.currentUtterance = utterance;
+        state.currentIdx = idx;
+
+        utterance.onend = () => {
+            state.isPlaying[idx] = false;
+            state.isPaused[idx] = false;
+            updateSentenceStatus(idx);
+            clearHighlight(idx);
+            if (state.currentIndex === idx) state.currentIndex = -1;
+            state.currentUtterance = null;
+            state.currentIdx = -1;
+            updateGlobalStatus('就绪');
+
+            // 循环模式自动播下一句
+            if (state.isLooping) {
+                const nextIdx = idx + 1;
+                if (nextIdx < sentencesData.length) {
+                    setTimeout(() => playSentence(nextIdx), 400);
+                } else {
+                    state.loopCount++;
+                    updateLoopInfo();
+                    if (state.loopCount < state.maxLoop) {
+                        setTimeout(() => playSentence(0), 600);
+                    } else {
+                        stopAll();
+                        updateGlobalStatus(`✅ 已完成 ${state.maxLoop} 次循环`);
+                        state.isLooping = false;
+                        btnLoop.classList.remove('active-loop');
+                        btnLoop.textContent = '🔁 循环播放';
+                    }
                 }
-                window.speechSynthesis.speak(utter);
             }
-            playNext();
-        }
+        };
 
-        // 整篇无限循环跟读
-        function repeatWholeArticle() {
-            if (!audioUnlocked) {
-                alert("请先解锁音频！");
-                return;
+        utterance.onerror = (e) => {
+            console.warn('语音错误:', e);
+            state.isPlaying[idx] = false;
+            state.isPaused[idx] = false;
+            updateSentenceStatus(idx);
+            clearHighlight(idx);
+            state.currentUtterance = null;
+            state.currentIdx = -1;
+            updateGlobalStatus('⚠️ 语音错误');
+            if (state.isLooping) {
+                state.isLooping = false;
+                btnLoop.classList.remove('active-loop');
+                btnLoop.textContent = '🔁 循环播放';
             }
-            stopAllSpeech();
-            const sentenceList = [];
-            document.querySelectorAll(".sentence-wrap").forEach(item => {
-                sentenceList.push(item.dataset.sentence);
-            })
-            let index = 0;
-            function playLoop() {
-                if (index >= sentenceList.length) index = 0;
-                const txt = sentenceList[index];
-                const utter = new SpeechSynthesisUtterance(txt);
-                if (targetVoice) utter.voice = targetVoice;
-                utter.rate = SPEECH_RATE;
-                utter.volume = SPEECH_VOLUME;
-                utter.pitch = 1.02;
-                utter.onend = () => {
-                    index++;
-                    setTimeout(playLoop, PAUSE_DELAY);
+        };
+
+        window.speechSynthesis.speak(utterance);
+        state.utterances[idx] = utterance;
+    }
+
+    function pauseSentence(idx) {
+        if (idx < 0 || idx >= sentencesData.length) return;
+        if (state.isPlaying[idx]) {
+            if (state.currentUtterance && state.currentIdx === idx) {
+                window.speechSynthesis.cancel();
+                state.isPlaying[idx] = false;
+                state.isPaused[idx] = true;
+                updateSentenceStatus(idx);
+                updateGlobalStatus(`已暂停 #${idx+1}`);
+                clearHighlight(idx);
+                state.currentUtterance = null;
+                state.currentIdx = -1;
+            }
+        } else if (state.isPaused[idx]) {
+            // 恢复播放（重新播放）
+            state.isPaused[idx] = false;
+            playSentence(idx);
+        } else {
+            updateSentenceStatus(idx);
+        }
+    }
+
+    // ================================================================
+    //  6. 全局控制
+    // ================================================================
+    function stopAll() {
+        window.speechSynthesis.cancel();
+        for (let i = 0; i < sentencesData.length; i++) {
+            state.isPlaying[i] = false;
+            state.isPaused[i] = false;
+            updateSentenceStatus(i);
+            clearHighlight(i);
+        }
+        state.currentIndex = -1;
+        state.currentUtterance = null;
+        state.currentIdx = -1;
+        if (state.isLooping) {
+            state.isLooping = false;
+            btnLoop.classList.remove('active-loop');
+            btnLoop.textContent = '🔁 循环播放';
+        }
+        state.loopCount = 0;
+        updateLoopInfo();
+        updateGlobalStatus('已停止');
+    }
+
+    function stopLoop() {
+        state.isLooping = false;
+        btnLoop.classList.remove('active-loop');
+        btnLoop.textContent = '🔁 循环播放';
+        state.loopCount = 0;
+        updateLoopInfo();
+        updateGlobalStatus('已取消循环');
+    }
+
+    function toggleLoop() {
+        if (state.isLooping) {
+            stopLoop();
+        } else {
+            state.isLooping = true;
+            state.loopCount = 0;
+            btnLoop.classList.add('active-loop');
+            btnLoop.textContent = '🔁 循环中';
+            updateLoopInfo();
+            updateGlobalStatus('🔄 循环模式开启');
+
+            // 如果当前没有播放，从第一句开始
+            const anyPlaying = state.isPlaying.some(v => v === true);
+            if (!anyPlaying) {
+                window.speechSynthesis.cancel();
+                for (let i = 0; i < sentencesData.length; i++) {
+                    state.isPlaying[i] = false;
+                    state.isPaused[i] = false;
+                    updateSentenceStatus(i);
+                    clearHighlight(i);
                 }
-                window.speechSynthesis.speak(utter);
+                state.currentIndex = -1;
+                state.currentUtterance = null;
+                state.currentIdx = -1;
+                setTimeout(() => playSentence(0), 300);
+            } else {
+                // 已有播放，等待 onend 自动继续
             }
-            playLoop();
         }
+    }
 
-        // 按钮事件绑定
-        document.querySelectorAll(".read-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const text = this.closest(".sentence-wrap").dataset.sentence;
-                speakSingleText(text);
-            })
-        })
-        document.querySelectorAll(".repeat-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const text = this.closest(".sentence-wrap").dataset.sentence;
-                repeatRead(text);
-            })
-        })
-        document.querySelectorAll(".stop-btn").forEach(btn => {
-            btn.addEventListener("click", stopAllSpeech);
-        })
-        document.getElementById("readAll").addEventListener("click", readWholeArticle);
-        document.getElementById("repeatAll").addEventListener("click", repeatWholeArticle);
-        document.getElementById("stopAll").addEventListener("click", stopAllSpeech);
-    </script>
+    // ================================================================
+    //  7. UI 更新辅助
+    // ================================================================
+    function updateSentenceStatus(idx) {
+        const el = document.getElementById(`status-${idx}`);
+        if (!el) return;
+        if (state.isPlaying[idx]) {
+            el.textContent = '🔊 朗读中';
+            el.style.color = '#2a7a3a';
+        } else if (state.isPaused[idx]) {
+            el.textContent = '⏸ 已暂停';
+            el.style.color = '#b88a3a';
+        } else {
+            el.textContent = '● 待播';
+            el.style.color = '#6f8f72';
+        }
+    }
+
+    function clearHighlight(idx) {
+        const el = document.getElementById(`sentence-${idx}`);
+        if (el) el.classList.remove('active');
+    }
+
+    function clearHighlightAll() {
+        document.querySelectorAll('.sentence.active').forEach(el => el.classList.remove('active'));
+    }
+
+    function updateLoopInfo() {
+        loopInfo.textContent = `${state.loopCount} / ${state.maxLoop}`;
+    }
+
+    function updateGlobalStatus(msg) {
+        globalStatus.textContent = `● ${msg}`;
+    }
+
+    // ================================================================
+    //  8. 初始化
+    // ================================================================
+    function init() {
+        renderSentences();
+        btnLoop.addEventListener('click', toggleLoop);
+        btnStop.addEventListener('click', stopAll);
+        updateLoopInfo();
+        updateGlobalStatus('就绪');
+        getVoice().then(v => { if (v) state.voice = v; });
+        if (window.speechSynthesis) window.speechSynthesis.getVoices();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            getVoice().then(v => { if (v) state.voice = v; });
+        }
+    });
+
+    console.log('✅ A Good Way to Learn English H5 | 所有课标单词已覆盖');
+</script>
 </body>
 </html>
